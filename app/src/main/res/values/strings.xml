@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">OnTime Fitness</string>
+    <string name="button_schedule">Schedule</string>
+    <string name="title_activity_boddy__settings_">Boddy_Settings_Activity</string>
+    <string name="username">admin</string>
+    <string name="password">admin</string>
+</resources>
