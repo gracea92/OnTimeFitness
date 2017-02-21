@@ -28,6 +28,8 @@
         </activity>
         <activity android:name=".Login_Activity" />
         <activity android:name=".Create_Activity"></activity>
+        <activity android:name=".AndroidDatabaseManager"
+            android:theme="@style/Theme.AppCompat.Light"/>
     </application>
 
 </manifest>

@@ -25,7 +25,7 @@
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:inputType="textPersonName"
+        android:inputType="textPassword"
         android:ems="10"
         android:id="@+id/editPassword"
         android:layout_marginTop="15dp"
@@ -57,5 +57,17 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         android:onClick="loadCreateUser"/>
+
+    <Button
+        android:text="View Database"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toLeftOf="@+id/buttonLogin"
+        android:layout_toStartOf="@+id/buttonLogin"
+        android:layout_marginRight="21dp"
+        android:layout_marginEnd="21dp"
+        android:id="@+id/button2"
+        android:layout_alignTop="@+id/buttonLogin"
+        android:onClick="loadDb" />
 
 </RelativeLayout>
