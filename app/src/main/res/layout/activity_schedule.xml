@@ -11,7 +11,7 @@
     tools:context="com.example.jaredkohler.ontimefitness.Options_Activity">
 
     <TextView
-        android:text="Current Schedule: ScheduleA"
+        android:text="@string/curSchedule"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/textSchedule"
@@ -22,7 +22,7 @@
         android:layout_marginTop="16dp" />
 
     <Button
-        android:text="Select Schedule"
+        android:text="@string/selectSchedule"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/buttonScheduleSelect"
@@ -31,7 +31,7 @@
         android:layout_alignParentEnd="true" />
 
     <Button
-        android:text="Save Exit"
+        android:text="@string/exit"
         android:layout_width="110dp"
         android:layout_height="wrap_content"
         android:id="@+id/buttonSave"
@@ -40,7 +40,7 @@
         android:layout_alignParentEnd="true" />
 
     <Button
-        android:text="Add Event"
+        android:text="@string/addEvent"
         android:layout_height="wrap_content"
         android:id="@+id/buttonAddEvent"
         android:layout_width="110dp"
@@ -49,7 +49,7 @@
         android:layout_alignParentStart="true" />
 
     <Button
-        android:text="Edit Event"
+        android:text="@string/editEvent"
         android:layout_height="wrap_content"
         android:id="@+id/buttonRemoveEvent"
         style="@style/Widget.AppCompat.Button"

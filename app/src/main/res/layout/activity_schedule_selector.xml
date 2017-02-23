@@ -11,7 +11,7 @@
     tools:context="com.example.jaredkohler.ontimefitness.Options_Activity">
 
     <Button
-        android:text="Edit "
+        android:text="@string/edit"
         android:layout_height="wrap_content"
         android:id="@+id/buttonRemoveSchedule"
         style="@style/Widget.AppCompat.Button"
@@ -21,7 +21,7 @@
         android:layout_marginBottom="87dp" />
 
     <Button
-        android:text="Remove"
+        android:text="@string/remove"
         android:layout_width="110dp"
         android:layout_height="wrap_content"
         android:id="@+id/buttonRemove"
@@ -31,7 +31,7 @@
         android:layout_alignParentEnd="true" />
 
     <Button
-        android:text="Exit"
+        android:text="@string/exit"
         android:layout_width="110dp"
         android:layout_height="wrap_content"
         android:layout_below="@+id/buttonRemove"
@@ -41,7 +41,7 @@
         android:id="@+id/editCreate" />
 
     <Button
-        android:text="Active"
+        android:text="@string/active"
         android:layout_height="wrap_content"
         android:id="@+id/buttonActive"
         android:layout_width="110dp"
@@ -60,7 +60,7 @@
         android:layout_marginTop="27dp" />
 
     <TextView
-        android:text="Select a schedule to make active, edit or remove."
+        android:text="@string/scheduleSelectPrompt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"

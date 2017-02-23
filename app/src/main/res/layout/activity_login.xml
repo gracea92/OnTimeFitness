@@ -16,7 +16,7 @@
         android:inputType="textPersonName"
         android:ems="10"
         android:id="@+id/editName"
-        android:hint="UserName"
+        android:hint="@string/user"
         android:layout_marginTop="17dp"
         android:layout_alignParentTop="true"
         android:layout_alignLeft="@+id/editPassword"
@@ -29,13 +29,13 @@
         android:ems="10"
         android:id="@+id/editPassword"
         android:layout_marginTop="15dp"
-        android:hint="Password"
+        android:hint="@string/pass"
         android:layout_below="@+id/editName"
         android:layout_alignLeft="@+id/buttonLogin"
         android:layout_alignStart="@+id/buttonLogin" />
 
     <Button
-        android:text="Login"
+        android:text="@string/login"
         android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:id="@+id/buttonLogin"
@@ -48,7 +48,7 @@
         android:onClick="login"/>
 
     <Button
-        android:text="Create"
+        android:text="@string/create"
         android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:id="@+id/editCreate"
@@ -59,7 +59,7 @@
         android:onClick="loadCreateUser"/>
 
     <Button
-        android:text="View Database"
+        android:text="@string/viewData"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_toLeftOf="@+id/buttonLogin"
