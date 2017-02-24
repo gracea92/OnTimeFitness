@@ -38,7 +38,9 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         android:layout_marginTop="10dp"
-        android:id="@+id/editCreate" />
+        android:id="@+id/editCreate"
+        android:onClick="Exit"/>
+
 
     <Button
         android:text="@string/active"

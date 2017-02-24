@@ -27,7 +27,8 @@
         android:layout_alignTop="@+id/editCreate"
         android:layout_alignRight="@+id/editHeight"
         android:layout_alignEnd="@+id/editHeight"
-        android:id="@+id/button3" />
+        android:id="@+id/button3"
+        android:onClick="Exit"/>
 
     <Button
         android:text="@string/create"

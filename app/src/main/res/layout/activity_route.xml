@@ -88,6 +88,7 @@
         android:layout_alignTop="@+id/textView3"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:id="@+id/editCreate" />
+        android:id="@+id/editCreate"
+        android:onClick="Exit"/>
 
 </RelativeLayout>

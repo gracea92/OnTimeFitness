@@ -53,4 +53,8 @@ public class Create_Activity extends AppCompatActivity {
             startActivity(intent);
         }
     }
+
+    public void Exit(View view){
+        finish();
+    }
 }

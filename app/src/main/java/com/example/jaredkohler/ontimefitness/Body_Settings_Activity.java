@@ -5,6 +5,7 @@ import android.os.SystemClock;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.ViewGroup;
+import android.view.View;
 
 public class Body_Settings_Activity extends AppCompatActivity {
     long startTime;
@@ -29,5 +30,9 @@ public class Body_Settings_Activity extends AppCompatActivity {
 
         Intent intent = getIntent();
         ViewGroup layout = (ViewGroup) findViewById(R.id.activity_schedule);
+    }
+
+    public void Exit(View view) {
+        finish();
     }
 }

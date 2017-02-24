@@ -5,6 +5,7 @@ import android.os.SystemClock;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.ViewGroup;
+import android.view.View;
 
 import java.util.Timer;
 
@@ -33,5 +34,9 @@ public class Select_Schedule_Activity extends AppCompatActivity {
         Intent intent = getIntent();
         ViewGroup layout = (ViewGroup) findViewById(R.id.activity_schedule);
 
+    }
+
+    public void Exit(View view){
+        finish();
     }
 }

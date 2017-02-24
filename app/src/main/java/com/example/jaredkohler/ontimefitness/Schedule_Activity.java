@@ -5,6 +5,7 @@ import android.os.SystemClock;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.ViewGroup;
+import android.view.View;
 
 public class Schedule_Activity extends AppCompatActivity {
     private long startTime=0;
@@ -31,5 +32,8 @@ public class Schedule_Activity extends AppCompatActivity {
         ViewGroup layout = (ViewGroup) findViewById(R.id.activity_schedule);
     }
 
+    public void Exit(View view){
+        finish();
+    }
 
 }
