@@ -4,21 +4,25 @@ import android.content.Intent;
 import android.os.SystemClock;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.ViewGroup;
 import android.view.View;
 
 public class Body_Settings_Activity extends AppCompatActivity {
     long startTime;
+    private final String TAG = getClass().getSimpleName();
 
     @Override
     protected void onStop() {
         super.onStop();
+        Log.d(TAG, "+++ onStop +++");
         startTime = SystemClock.elapsedRealtime();
     }
 
     @Override
     protected void onRestart() {
         super.onRestart();
+        Log.d(TAG, "+++ onRestart +++");
         if(startTime + 5000 <SystemClock.elapsedRealtime()){
             finish();
         }
@@ -26,6 +30,7 @@ public class Body_Settings_Activity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.d(TAG, "+++ onCreate +++");
         setContentView(R.layout.activity_body);
 
         Intent intent = getIntent();
