@@ -38,8 +38,7 @@
         android:id="@+id/editCreate"
         android:layout_alignParentBottom="true"
         android:layout_toLeftOf="@+id/textView4"
-        android:layout_toStartOf="@+id/textView4"
-        android:onClick="createUser"/>
+        android:layout_toStartOf="@+id/textView4"/>
 
     <EditText
         android:layout_width="wrap_content"
@@ -91,36 +90,4 @@
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="14dp" />
 
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="textPassword"
-        android:ems="10"
-        android:id="@+id/editConfirmPass"
-        android:layout_below="@+id/editPassword"
-        android:layout_alignLeft="@+id/editPassword"
-        android:layout_alignStart="@+id/editPassword"
-        android:hint="@string/user" />
-
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="textPersonName"
-        android:ems="10"
-        android:id="@+id/editUsername"
-        android:layout_alignParentTop="true"
-        android:layout_alignLeft="@+id/editWeight"
-        android:layout_alignStart="@+id/editWeight"
-        android:hint="@string/pass" />
-
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="textPassword"
-        android:ems="10"
-        android:id="@+id/editPassword"
-        android:layout_below="@+id/editUsername"
-        android:layout_alignLeft="@+id/editUsername"
-        android:layout_alignStart="@+id/editUsername"
-        android:hint="@string/confirmPass" />
 </RelativeLayout>
