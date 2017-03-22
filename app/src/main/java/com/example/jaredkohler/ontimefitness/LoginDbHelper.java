@@ -20,7 +20,11 @@ public class LoginDbHelper extends SQLiteOpenHelper{
             "CREATE TABLE " + LogInContract.LogInEntry.TABLE_NAME + " (" +
                     LogInContract.LogInEntry._ID + " INTEGER PRIMARY KEY," +
                     LogInContract.LogInEntry.COLUMN_NAME_TITLE + " TEXT," +
-                    LogInContract.LogInEntry.COLUMN_NAME_SUBTITLE + " TEXT)";
+                    LogInContract.LogInEntry.COLUMN_NAME_SUBTITLE + " TEXT,"+
+                    LogInContract.LogInEntry.COLUMN_NAME_WEIGHT + " TEXT," +
+                    LogInContract.LogInEntry.COLUMN_NAME_HEIGHT + " TEXT," +
+                    LogInContract.LogInEntry.COLUMN_NAME_GENDER + " TEXT," +
+                    LogInContract.LogInEntry.COLUMN_NAME_STEPS + " TEXT)";
 
     private static final String SQL_DELETE_ENTRIES =
             "DROP TABLE IF EXISTS " + LogInContract.LogInEntry.TABLE_NAME;

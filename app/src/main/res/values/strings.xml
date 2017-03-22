@@ -39,4 +39,8 @@
     <string name= "selectSchedule">Select Schedule</string>
     <string name= "addEvent">Add Event</string>
     <string name= "editEvent">Edit Event</string>
+    <string-array name= "gender_array">
+        <item>Male</item>
+        <item>Female</item>
+    </string-array>
 </resources>

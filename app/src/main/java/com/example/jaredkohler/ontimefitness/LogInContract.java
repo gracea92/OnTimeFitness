@@ -7,8 +7,13 @@ public final class LogInContract {
 
     public static class LogInEntry implements BaseColumns{
         public static final String TABLE_NAME = "login";
-        public static final String COLUMN_NAME_TITLE = "title";
-        public static final String COLUMN_NAME_SUBTITLE = "subtitle";
+        public static final String COLUMN_NAME_TITLE = "username";
+        public static final String COLUMN_NAME_SUBTITLE = "password";
+        public static final String COLUMN_NAME_WEIGHT = "weight";
+        public static final String COLUMN_NAME_HEIGHT = "height";
+        public static final String COLUMN_NAME_GENDER = "gender";
+        public static final String COLUMN_NAME_STEPS = "steps";
+
     }
 
 }
