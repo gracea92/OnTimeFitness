@@ -10,26 +10,6 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.example.jaredkohler.ontimefitness.Options_Activity">
 
-    <TextView
-        android:text="@string/curSchedule"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/textSchedule"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="16dp" />
-
-    <Button
-        android:text="@string/selectSchedule"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/buttonScheduleSelect"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
-
     <Button
         android:text="@string/exit"
         android:layout_width="110dp"
@@ -47,7 +27,8 @@
         android:layout_width="110dp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:onClick="addEvent"/>
 
     <Button
         android:text="@string/editEvent"
@@ -58,12 +39,25 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true" />
 
-    <CalendarView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:id="@+id/calendarView3" />
+        android:layout_marginBottom="60dp"
+        android:layout_marginTop="60dp"
+        android:id="@+id/listEvent" />
+
+    <TextView
+        android:text="@string/curSchedule"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textSchedule"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+        android:layout_marginTop="18dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
+
 
 </RelativeLayout>

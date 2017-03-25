@@ -27,7 +27,7 @@
         android:layout_height="wrap_content"
         android:inputType="textPersonName"
         android:ems="10"
-        android:id="@+id/editPassword"
+        android:id="@+id/editLocation"
         android:layout_marginTop="15dp"
         android:hint="@string/location"
         android:layout_below="@+id/editName"
@@ -42,7 +42,7 @@
         android:layout_marginTop="15dp"
         android:id="@+id/editTime"
         android:hint="@string/time"
-        android:layout_below="@+id/editPassword"
+        android:layout_below="@+id/editLocation"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
@@ -67,7 +67,8 @@
         android:layout_marginEnd="14dp"
         android:layout_alignParentBottom="true"
         android:layout_toLeftOf="@+id/editCreate"
-        android:layout_toStartOf="@+id/editCreate" />
+        android:layout_toStartOf="@+id/editCreate"
+        android:onClick="save"/>
 
     <RadioButton
         android:text="@string/weekly"
@@ -112,5 +113,6 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
+
 
 </RelativeLayout>

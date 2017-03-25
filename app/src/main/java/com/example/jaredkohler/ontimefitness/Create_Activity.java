@@ -108,6 +108,7 @@ public class Create_Activity extends AppCompatActivity {
             values.put(LogInContract.LogInEntry.COLUMN_NAME_HEIGHT, height.getText().toString());
             values.put(LogInContract.LogInEntry.COLUMN_NAME_GENDER, gender.getSelectedItem().toString());
             values.put(LogInContract.LogInEntry.COLUMN_NAME_STEPS, "0");
+            values.put(LogInContract.LogInEntry.COLUMN_NAME_CAL, "1");
             long newRowId = db.insert(LogInContract.LogInEntry.TABLE_NAME, null, values);
 
             //Loads the login activity

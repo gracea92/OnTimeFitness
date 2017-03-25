@@ -41,7 +41,8 @@ public class Login_Activity extends AppCompatActivity {
         String[] projection = {
                 LogInContract.LogInEntry._ID,
                 LogInContract.LogInEntry.COLUMN_NAME_TITLE,
-                LogInContract.LogInEntry.COLUMN_NAME_SUBTITLE
+                LogInContract.LogInEntry.COLUMN_NAME_SUBTITLE,
+                LogInContract.LogInEntry.COLUMN_NAME_CAL
         };
 
         //Filters the results where username column = inputted username
@@ -87,11 +88,14 @@ public class Login_Activity extends AppCompatActivity {
                     null
             );
 
-            //Gets the list of ids from the query
+            //Gets the list of ids from the query and list of associated calIDs
             List passwordIds = new ArrayList<>();
+            List calIDs = new ArrayList<>();
             while(cursor.moveToNext()){
                 long passwordId = cursor.getLong(cursor.getColumnIndex(LogInContract.LogInEntry._ID));
                 passwordIds.add(passwordId);
+                String calID = cursor.getString(cursor.getColumnIndex(LogInContract.LogInEntry.COLUMN_NAME_CAL));
+                calIDs.add(calID);
             }
             cursor.close();
 
@@ -103,6 +107,8 @@ public class Login_Activity extends AppCompatActivity {
                 SharedPreferences sharedpreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
                 SharedPreferences.Editor editor = sharedpreferences.edit();
                 editor.putString("ID",passwordIds.get(0).toString());
+
+                editor.putString("calID", calIDs.get(0).toString());
                 editor.commit();
 
                 //Loads the options activity

@@ -18,7 +18,8 @@
         android:layout_width="110dp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="87dp" />
+        android:layout_marginBottom="87dp"
+        android:onClick="Edit"/>
 
     <Button
         android:text="@string/remove"
@@ -50,7 +51,8 @@
         android:layout_alignBaseline="@+id/buttonRemoveSchedule"
         android:layout_alignBottom="@+id/buttonRemoveSchedule"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:onClick="Active"/>
 
     <Spinner
         android:layout_width="match_parent"

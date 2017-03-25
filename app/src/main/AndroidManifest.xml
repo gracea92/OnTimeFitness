@@ -1,17 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.jaredkohler.ontimefitness">
-
+    <uses-permission android:name="android.permission.READ_CALENDAR" />
+    <uses-permission android:name="android.permission.WRITE_CALENDAR" />
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <uses-permission android:name="android.permission.READ_CALENDAR" />
+        <uses-permission android:name="android.permission.WRITE_CALENDAR" />
         <activity android:name=".Options_Activity" />
         <activity android:name=".Schedule_Activity" />
         <activity android:name=".Select_Schedule_Activity" />
         <activity android:name=".Daily_Route_Activity" />
+        <activity android:name=".Event_Activity" />
         <!--
             <activity
             android:name=".Body_Settings_Activity"
