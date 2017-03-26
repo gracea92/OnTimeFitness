@@ -19,7 +19,7 @@ public class Options_Activity extends AppCompatActivity {
 
     private final String TAG = getClass().getSimpleName();
     public final static String EXTRA_MESSAGE = "com.example.jaredkohler.ontimefitness.Schedule_Activity";
-    public static final String MyPREFERENCES = "MyPrefs";
+
 
     @Override protected void onPause(){
         super.onPause();
@@ -33,19 +33,13 @@ public class Options_Activity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        if(ContextCompat.checkSelfPermission(this,
-                Manifest.permission.READ_CALENDAR) != PackageManager.PERMISSION_GRANTED &&
-                ContextCompat.checkSelfPermission(this,
-                        Manifest.permission.WRITE_CALENDAR) != PackageManager.PERMISSION_GRANTED) {
 
-            ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.READ_CALENDAR, Manifest.permission.WRITE_CALENDAR},
-                    259);
-
-        }
         super.onCreate(savedInstanceState);
         Log.d(TAG, "+++ onCreate() +++");
         setContentView(R.layout.activity_options);
+        //Get access for calendar
+
+        CalendarsHelper.requestCalendarPermission(this);
     }
 
     @Override
@@ -57,19 +51,7 @@ public class Options_Activity extends AppCompatActivity {
     public void loadSchedule(View view){
         Intent intent = new Intent(this, Schedule_Activity.class);
 
-
-        SharedPreferences sharedPreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
-        String id = sharedPreferences.getString("ID",null);
-
-        //Gets data repository in write mode
-        LoginDbHelper mDbHelper = new LoginDbHelper(this);
-        SQLiteDatabase db = mDbHelper.getWritableDatabase();
-
-        Cursor cursor  = db.query(LogInContract.LogInEntry.TABLE_NAME, new String[]{LogInContract.LogInEntry.COLUMN_NAME_CAL}
-                , "(" +LogInContract.LogInEntry._ID + " == '" + id + "')", null,null, null, null);
-        cursor.moveToNext();
-
-        intent.putExtra("calID", cursor.getString(0));
+        intent.putExtra("calID", CalendarsHelper.getCurCalID(this));
         startActivity(intent);
     }
 

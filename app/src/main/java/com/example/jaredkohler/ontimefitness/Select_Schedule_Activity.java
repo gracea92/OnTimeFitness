@@ -35,22 +35,8 @@ public class Select_Schedule_Activity extends AppCompatActivity {
 
     private Spinner spinner;
 
-    public static final String[] EVENT_PROJECTION = new String[] {
-            Calendars._ID,                           // 0
-            Calendars.ACCOUNT_NAME,                  // 1
-            Calendars.CALENDAR_DISPLAY_NAME,         // 2
-            Calendars.OWNER_ACCOUNT                  // 3
-    };
-
-    // The indices for the projection array above.
-    private static final int PROJECTION_ID_INDEX = 0;
-    private static final int PROJECTION_ACCOUNT_NAME_INDEX = 1;
-    private static final int PROJECTION_DISPLAY_NAME_INDEX = 2;
-    private static final int PROJECTION_OWNER_ACCOUNT_INDEX = 3;
-
     public static final String MyPREFERENCES = "MyPrefs";
 
-    List<String> calendarDisplayNames;
     List<Long> calendarLongID;
 
     @Override protected void onPause(){
@@ -81,8 +67,7 @@ public class Select_Schedule_Activity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        calendarDisplayNames = new ArrayList<String>();
-        calendarLongID = new ArrayList<Long>();
+
 
         super.onCreate(savedInstanceState);
         Log.d(TAG, "+++ onCreate() +++");
@@ -91,59 +76,15 @@ public class Select_Schedule_Activity extends AppCompatActivity {
         Intent intent = getIntent();
         ViewGroup layout = (ViewGroup) findViewById(R.id.activity_schedule);
 
-        // Run query
-        Cursor cur = null;
-        ContentResolver cr = getContentResolver();
-        Uri uri = Calendars.CONTENT_URI;
-        String[] selection = new String[]{Calendars._ID, Calendars.NAME, Calendars.ACCOUNT_NAME,
-            Calendars.ACCOUNT_TYPE};
-        String[] selectionArgs = new String[] {"hera@example.com", "com.example",
-                "hera@example.com"};
+        calendarLongID = CalendarsHelper.listOfCalendars(this);
 
-        if(ContextCompat.checkSelfPermission(this,
-                Manifest.permission.READ_CALENDAR) == PackageManager.PERMISSION_GRANTED &&
-                ContextCompat.checkSelfPermission(this,
-                Manifest.permission.WRITE_CALENDAR) == PackageManager.PERMISSION_GRANTED) {
-            // Submit the query and get a Cursor object back.
-            cur = cr.query(uri, selection, Calendars.VISIBLE + " =1", null, Calendars._ID + " ASC");
+        spinner = (Spinner) findViewById(R.id.spinnerSchedules);
+        ArrayAdapter<Long> adapter = new ArrayAdapter<Long>(this, android.R.layout.simple_spinner_item, calendarLongID);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
+        spinner.setAdapter(adapter);
 
+        spinner.setSelection(Integer.parseInt(CalendarsHelper.getCurCalID(this))-1);
 
-            while (cur.moveToNext()) {
-                long calID = 0;
-                String displayName = null;
-                String accountName = null;
-                String ownerName = null;
-
-                // Get the field values
-                calID = cur.getLong(PROJECTION_ID_INDEX);
-                displayName = cur.getString(PROJECTION_DISPLAY_NAME_INDEX);
-                accountName = cur.getString(PROJECTION_ACCOUNT_NAME_INDEX);
-                ownerName = cur.getString(PROJECTION_OWNER_ACCOUNT_INDEX);
-
-                calendarDisplayNames.add(displayName);
-                calendarLongID.add(calID);
-
-
-            }
-
-            spinner = (Spinner) findViewById(R.id.spinnerSchedules);
-            ArrayAdapter<Long> adapter = new ArrayAdapter<Long>(this, android.R.layout.simple_spinner_item, calendarLongID);
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
-            spinner.setAdapter(adapter);
-
-            SharedPreferences sharedPreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
-            String id = sharedPreferences.getString("ID",null);
-
-            //Gets data repository in write mode
-            LoginDbHelper mDbHelper = new LoginDbHelper(this);
-            SQLiteDatabase db = mDbHelper.getWritableDatabase();
-
-            Cursor cursor  = db.query(LogInContract.LogInEntry.TABLE_NAME, new String[]{LogInContract.LogInEntry.COLUMN_NAME_CAL}
-                    , "(" +LogInContract.LogInEntry._ID + " == '" + id + "')", null,null, null, null);
-            cursor.moveToNext();
-
-            spinner.setSelection(Integer.parseInt(cursor.getString(0))-1);
-        }
     }
 
     public void Active(View view){

@@ -32,14 +32,9 @@ public class Schedule_Activity extends AppCompatActivity {
     // This is the Adapter being used to display the list's data
     SimpleCursorAdapter mAdapter;
 
-    // These are the Contacts rows that we will retrieve
-    static final String[] PROJECTION = new String[] {CalendarContract.Events._ID,
-            CalendarContract.Events.TITLE, CalendarContract.Events.DTSTART};
 
-    String calID;
+    private CalendarOnTime cal;
 
-    // This is the select criteria
-    String SELECTION;
 
     //For launching edit or remove on listClick.
     private int Pos;
@@ -64,63 +59,41 @@ public class Schedule_Activity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_schedule);
 
-        calID = getIntent().getExtras().getString("calID");
-
+        cal = new CalendarOnTime(getIntent().getExtras().getString("calID"));
         TextView current = (TextView) findViewById(R.id.textSchedule);
+        current.setText("Current Schedule " + cal.getCalID());
 
-        current.setText("Current Schedule " + calID);
-        SELECTION = "((" +
-                CalendarContract.Events.CALENDAR_ID + " == '" + calID + "') AND (" +
-                CalendarContract.Events.DELETED + " != '1'))";
-        Log.d(TAG, "+++ onCreate +++");
-
-
-        Intent intent = getIntent();
-        ViewGroup layout = (ViewGroup) findViewById(R.id.activity_schedule);
-        ListView list = (ListView) findViewById(R.id.listEvent);
-
-
-        // For the cursor adapter, specify which columns go into which views
+        // .For the cursor adapter, specify which columns go into which views
         String[] fromColumns = {CalendarContract.Events.TITLE};
         int[] toViews = {android.R.id.text1}; // The TextView in simple_list_item_1
-
-
-
         // Create an empty adapter we will use to display the loaded data.
         // We pass null for the cursor, then update it in onLoadFinished()
-        Cursor cur = null;
-        ContentResolver cr = getContentResolver();
-
-        if(ContextCompat.checkSelfPermission(this,
-                Manifest.permission.READ_CALENDAR) == PackageManager.PERMISSION_GRANTED &&
-                ContextCompat.checkSelfPermission(this,
-                        Manifest.permission.WRITE_CALENDAR) == PackageManager.PERMISSION_GRANTED) {
-            cur = cr.query(CalendarContract.Events.CONTENT_URI, PROJECTION, SELECTION, null, CalendarContract.Events.DTSTART + " ASC");
-
-        }
+        Cursor cur = cal.getListOfEvents(this);
         mAdapter = new SimpleCursorAdapter(this,
                 android.R.layout.simple_list_item_1, cur ,
                 fromColumns, toViews, 0);
 
+        ListView list = (ListView) findViewById(R.id.listEvent);
         list.setAdapter(mAdapter);
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick (AdapterView < ? > adapter, View view,int position, long arg){
 
-                    CharSequence options[] = new CharSequence[] {"Edit", "Delete", "Cancel"};
                     View = view;
                     Pos = position;
+                    CharSequence options[] = new CharSequence[] {"Edit", "Delete", "Cancel"};
+
                     AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
                     builder.setTitle("Edit or Delete event?");
                     builder.setItems(options, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
+
                             long i = mAdapter.getItemId(Pos);
                             if(which == 0) {
-
                                 Intent intent = new Intent(View.getContext(), Event_Activity.class);
                                 intent.putExtra("ID", i);
-                                intent.putExtra("calID", calID);
+                                intent.putExtra("calID", cal.getCalID());
                                 startActivity(intent);
                             } else if(which == 1) {
                                 Uri deleteUri = ContentUris.withAppendedId(CalendarContract.Events.CONTENT_URI, i);
@@ -136,13 +109,15 @@ public class Schedule_Activity extends AppCompatActivity {
             }
         );
 
+        Log.d(TAG, "+++ onCreate +++");
+
     }
 
     public void addEvent(View view){
         Intent intent = new Intent(this, Event_Activity.class);
         long i = -1;
         intent.putExtra("ID", i);
-        intent.putExtra("calID", calID);
+        intent.putExtra("calID", cal.getCalID());
         startActivity(intent);
     }
 

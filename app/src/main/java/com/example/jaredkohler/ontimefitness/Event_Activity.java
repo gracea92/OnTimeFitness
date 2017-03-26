@@ -28,12 +28,12 @@ public class Event_Activity extends AppCompatActivity {
     private long startTime=0;
     private final String TAG = getClass().getSimpleName();
 
-    private long eventID;
     EditText name;
     EditText location;
     EditText time;
     EditText date;
     long calID;
+    EventOnTime event;
 
     @Override
     protected void onStop() {
@@ -53,7 +53,7 @@ public class Event_Activity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        eventID = getIntent().getExtras().getLong("ID");
+        event = new EventOnTime(getIntent().getExtras().getLong("ID"));
         calID = Long.parseLong(getIntent().getExtras().getString("calID"));
 
         Log.d(TAG, "+++ onCreate +++");
@@ -63,50 +63,26 @@ public class Event_Activity extends AppCompatActivity {
         time = (EditText)findViewById((R.id.editTime));
         date = (EditText) findViewById((R.id.editDate));
 
-        if(ContextCompat.checkSelfPermission(this,
-                Manifest.permission.READ_CALENDAR) != PackageManager.PERMISSION_GRANTED &&
-                ContextCompat.checkSelfPermission(this,
-                        Manifest.permission.WRITE_CALENDAR) != PackageManager.PERMISSION_GRANTED) {
-
-            ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.READ_CALENDAR, Manifest.permission.WRITE_CALENDAR},
-                    259);
-
-        }
-        if(eventID != -1) {
-            ContentResolver cr = getContentResolver();
-
-            Cursor cur= cr.query(CalendarContract.Events.CONTENT_URI, new String[]{CalendarContract.Events.TITLE},
-                    "(" + CalendarContract.Events._ID + " = " + eventID + ")", null, null);
+        if(event.getEventID() != -1) {
+            Cursor cur = event.getOnTimeEventInfo(this);
             cur.moveToNext();
+
+            //process cursor
             name.setText(cur.getString(0));
-            cur= cr.query(CalendarContract.Events.CONTENT_URI, new String[]{CalendarContract.Events.EVENT_LOCATION},
-                    "(" + CalendarContract.Events._ID + " == '" + eventID + "')", null, null);
-            cur.moveToNext();
-            location.setText(cur.getString(0));
-
-            cur= cr.query(CalendarContract.Events.CONTENT_URI, new String[]{CalendarContract.Events.DTSTART},
-                    "(" + CalendarContract.Events._ID + " == '" + eventID + "')", null, null);
-            cur.moveToNext();
-            SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd hh:mm");
-            Calendar calendar = Calendar.getInstance();
-            calendar.setTimeInMillis(Long.parseLong(cur.getString(0)));
-            String dateTime = formatter.format(calendar.getTime());
-
-
+            location.setText(cur.getString(1));
+            String dateTime = CalendarsHelper.fromLongToFormatDate(Long.parseLong(cur.getString(2)));
 
             date.setText(dateTime.substring(0, dateTime.indexOf(' ')));
             time.setText(dateTime.substring(dateTime.indexOf(' ') + 1));
         }
+
     }
 
     public void save(View view){
 
         String timeString = time.getText().toString();
-
         int startHour = Integer.parseInt(timeString.substring(0, timeString.indexOf(':')));
         int startMinute = Integer.parseInt(timeString.substring(timeString.indexOf(':') +1));
-
         String fullDate = date.getText().toString();
 
         int year = Integer.parseInt(fullDate.substring(0, fullDate.indexOf('/')));
@@ -135,24 +111,7 @@ public class Event_Activity extends AppCompatActivity {
         values.put(Events.CALENDAR_ID, calID);
         values.put(Events.EVENT_TIMEZONE, "America/Chicago");
 
-
-        if(ContextCompat.checkSelfPermission(this,
-                Manifest.permission.READ_CALENDAR) != PackageManager.PERMISSION_GRANTED &&
-                ContextCompat.checkSelfPermission(this,
-                        Manifest.permission.WRITE_CALENDAR) != PackageManager.PERMISSION_GRANTED) {
-
-            ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.READ_CALENDAR, Manifest.permission.WRITE_CALENDAR},
-                    259);
-
-        }
-        if(eventID == -1) {
-            Uri uri = cr.insert(Events.CONTENT_URI, values);
-            eventID = Long.parseLong(uri.getLastPathSegment());
-        } else {
-            Uri updateUri = ContentUris.withAppendedId(Events.CONTENT_URI, eventID);
-            getContentResolver().update(updateUri, values, null, null);
-        }
+        event.addOrUpdateEvent(this,cr,values);
 
     }
 
