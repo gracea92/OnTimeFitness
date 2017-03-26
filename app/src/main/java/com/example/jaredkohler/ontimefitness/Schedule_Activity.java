@@ -2,6 +2,8 @@ package com.example.jaredkohler.ontimefitness;
 
 import android.Manifest;
 import android.content.ContentResolver;
+import android.content.ContentUris;
+import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -39,6 +41,9 @@ public class Schedule_Activity extends AppCompatActivity {
     // This is the select criteria
     String SELECTION;
 
+    //For launching edit or remove on listClick.
+    private int Pos;
+    private View View;
     @Override
     protected void onStop() {
         super.onStop();
@@ -64,8 +69,9 @@ public class Schedule_Activity extends AppCompatActivity {
         TextView current = (TextView) findViewById(R.id.textSchedule);
 
         current.setText("Current Schedule " + calID);
-        SELECTION = "(" +
-                CalendarContract.Events.CALENDAR_ID + " == '" + calID + "' )";
+        SELECTION = "((" +
+                CalendarContract.Events.CALENDAR_ID + " == '" + calID + "') AND (" +
+                CalendarContract.Events.DELETED + " != '1'))";
         Log.d(TAG, "+++ onCreate +++");
 
 
@@ -84,44 +90,48 @@ public class Schedule_Activity extends AppCompatActivity {
         // We pass null for the cursor, then update it in onLoadFinished()
         Cursor cur = null;
         ContentResolver cr = getContentResolver();
-        if(ContextCompat.checkSelfPermission(this,
-                Manifest.permission.READ_CALENDAR) != PackageManager.PERMISSION_GRANTED &&
-                ContextCompat.checkSelfPermission(this,
-                        Manifest.permission.WRITE_CALENDAR) != PackageManager.PERMISSION_GRANTED) {
 
-            ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.READ_CALENDAR, Manifest.permission.WRITE_CALENDAR},
-                    259);
+        if(ContextCompat.checkSelfPermission(this,
+                Manifest.permission.READ_CALENDAR) == PackageManager.PERMISSION_GRANTED &&
+                ContextCompat.checkSelfPermission(this,
+                        Manifest.permission.WRITE_CALENDAR) == PackageManager.PERMISSION_GRANTED) {
+            cur = cr.query(CalendarContract.Events.CONTENT_URI, PROJECTION, SELECTION, null, CalendarContract.Events.DTSTART + " ASC");
 
         }
-        cur = cr.query(CalendarContract.Events.CONTENT_URI, PROJECTION, SELECTION, null, CalendarContract.Events.DTSTART + " ASC");
-
-
         mAdapter = new SimpleCursorAdapter(this,
                 android.R.layout.simple_list_item_1, cur ,
                 fromColumns, toViews, 0);
+
         list.setAdapter(mAdapter);
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick (AdapterView < ? > adapter, View view,int position, long arg){
 
-                    CharSequence colors[] = new CharSequence[] {"red", "green", "blue", "black"};
-
+                    CharSequence options[] = new CharSequence[] {"Edit", "Delete", "Cancel"};
+                    View = view;
+                    Pos = position;
                     AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
-                    builder.setTitle("Pick a color");
-                    builder.setItems(colors, new DialogInterface.OnClickListener() {
+                    builder.setTitle("Edit or Delete event?");
+                    builder.setItems(options, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            // the user clicked on colors[which]
+                            long i = mAdapter.getItemId(Pos);
+                            if(which == 0) {
+
+                                Intent intent = new Intent(View.getContext(), Event_Activity.class);
+                                intent.putExtra("ID", i);
+                                intent.putExtra("calID", calID);
+                                startActivity(intent);
+                            } else if(which == 1) {
+                                Uri deleteUri = ContentUris.withAppendedId(CalendarContract.Events.CONTENT_URI, i);
+                                int rows = getContentResolver().delete(deleteUri, null, null);
+                                Log.d(TAG, "Deleted rows: " + rows);
+                            }
                         }
                     });
                     builder.show();
 
-                    long i = mAdapter.getItemId(position);
-                    Intent intent = new Intent(view.getContext(), Event_Activity.class);
-                    intent.putExtra("ID", i);
-                    intent.putExtra("calID", calID);
-                    startActivity(intent);
+
                 }
             }
         );

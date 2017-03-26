@@ -156,7 +156,7 @@ public class Event_Activity extends AppCompatActivity {
 
     }
 
-    public void Exit(View view){
+    public void exit(View view){
         finish();
     }
 

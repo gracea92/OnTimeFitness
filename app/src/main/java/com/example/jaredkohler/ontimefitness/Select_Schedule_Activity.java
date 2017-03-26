@@ -99,22 +99,12 @@ public class Select_Schedule_Activity extends AppCompatActivity {
             Calendars.ACCOUNT_TYPE};
         String[] selectionArgs = new String[] {"hera@example.com", "com.example",
                 "hera@example.com"};
-        // Submit the query and get a Cursor object back.
-        if(ContextCompat.checkSelfPermission(this,
-                Manifest.permission.READ_CALENDAR) != PackageManager.PERMISSION_GRANTED &&
-                ContextCompat.checkSelfPermission(this,
-                        Manifest.permission.WRITE_CALENDAR) != PackageManager.PERMISSION_GRANTED) {
-
-            ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.READ_CALENDAR, Manifest.permission.WRITE_CALENDAR},
-                    259);
-
-        }
 
         if(ContextCompat.checkSelfPermission(this,
                 Manifest.permission.READ_CALENDAR) == PackageManager.PERMISSION_GRANTED &&
                 ContextCompat.checkSelfPermission(this,
                 Manifest.permission.WRITE_CALENDAR) == PackageManager.PERMISSION_GRANTED) {
+            // Submit the query and get a Cursor object back.
             cur = cr.query(uri, selection, Calendars.VISIBLE + " =1", null, Calendars._ID + " ASC");
 
 

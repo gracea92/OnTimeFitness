@@ -17,7 +17,7 @@ import android.widget.Toast;
  * Created by Andy on 3/25/2017.
  */
 
-public class StepService extends IntentService implements SensorEventListener{
+public class  StepService extends IntentService implements SensorEventListener{
     private LoginDbHelper mDbHelper;
     private SQLiteDatabase db;
     private SensorManager mSensorManager;
