@@ -34,6 +34,9 @@
         <activity android:name=".Create_Activity"></activity>
         <activity android:name=".AndroidDatabaseManager"
             android:theme="@style/Theme.AppCompat.Light"/>
+        <service
+            android:name=".StepService"
+            android:exported="false"/>
     </application>
 
 </manifest>

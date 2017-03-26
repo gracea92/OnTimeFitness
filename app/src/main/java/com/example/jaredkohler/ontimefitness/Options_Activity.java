@@ -26,12 +26,19 @@ public class Options_Activity extends AppCompatActivity {
         super.onResume();
         Log.d(TAG, "+++ onResume() +++");
     }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         Log.d(TAG, "+++ onCreate() +++");
         setContentView(R.layout.activity_options);
+    }
+
+    @Override
+    protected void onStart(){
+        super.onStart();
+        launchStepService();
     }
 
     public void loadSchedule(View view){
@@ -66,5 +73,10 @@ public class Options_Activity extends AppCompatActivity {
     public void loadBodySettings(View view){
         Intent intent = new Intent(this, Body_Settings_Activity.class);
         startActivity(intent);
+    }
+
+    public void launchStepService(){
+        Intent intent = new Intent(this, StepService.class);
+        startService(intent);
     }
 }

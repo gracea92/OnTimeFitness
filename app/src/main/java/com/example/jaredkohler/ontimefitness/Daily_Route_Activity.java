@@ -1,12 +1,18 @@
 package com.example.jaredkohler.ontimefitness;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.SystemClock;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.ViewGroup;
 import android.view.View;
+import android.widget.TextView;
+import android.widget.Toast;
 
 public class Daily_Route_Activity extends AppCompatActivity {
     long startTime;
@@ -35,6 +41,46 @@ public class Daily_Route_Activity extends AppCompatActivity {
 
         Intent intent = getIntent();
         ViewGroup layout = (ViewGroup) findViewById(R.id.activity_schedule);
+
+        TextView steps = (TextView) findViewById(R.id.textGoal);
+
+        //Gets the ID of the logged in user from Shared Preferences
+        SharedPreferences sharedPreferences = getSharedPreferences(Login_Activity.MyPREFERENCES, Context.MODE_PRIVATE);
+        String id = sharedPreferences.getString("ID",null);
+
+        //Gets data repository in read mode
+        final LoginDbHelper mDbHelper = new LoginDbHelper(this);
+        SQLiteDatabase db = mDbHelper.getReadableDatabase();
+
+        //Selects the steps column to be returned after query
+        final String[] projection = {
+                LogInContract.LogInEntry.COLUMN_NAME_STEPS
+        };
+
+        //Filters the resulsts where the id is equal to the logged in user's id
+        String selection = LogInContract.LogInEntry._ID + " = ?";
+        String[] selectionArgs = {id};
+
+        //Query the database with the setting set above
+        Cursor cursor = db.query(
+                LogInContract.LogInEntry.TABLE_NAME,
+                projection,
+                selection,
+                selectionArgs,
+                null,
+                null,
+                null
+        );
+
+        //Gets the steps from teh result of the query
+        if(cursor.moveToNext()){
+            steps.setText(cursor.getString(cursor.getColumnIndex(LogInContract.LogInEntry.COLUMN_NAME_STEPS)));
+        }else{
+            Toast.makeText(this, "Failed to get number of steps", Toast.LENGTH_SHORT).show();
+            intent = new Intent(this, Login_Activity.class);
+            startActivity(intent);
+        }
+
     }
 
     public void Exit(View view) {

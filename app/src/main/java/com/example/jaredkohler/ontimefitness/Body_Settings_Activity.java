@@ -16,6 +16,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 public class Body_Settings_Activity extends AppCompatActivity {
     long startTime;
@@ -93,6 +94,7 @@ public class Body_Settings_Activity extends AppCompatActivity {
         if(cursor.moveToNext()){
             savedGender = cursor.getString(cursor.getColumnIndex(LogInContract.LogInEntry.COLUMN_NAME_GENDER));
         }else{
+            Toast.makeText(this, "Failed to get gender", Toast.LENGTH_SHORT).show();
             //Loads the login page if the query returns nothing
             intent = new Intent(this, Login_Activity.class);
             startActivity(intent);
