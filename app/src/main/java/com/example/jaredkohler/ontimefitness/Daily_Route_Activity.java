@@ -140,7 +140,7 @@ public class Daily_Route_Activity extends AppCompatActivity {
                                 if(cursor.moveToNext()){
                                     steps.setText(cursor.getString(cursor.getColumnIndex(LogInContract.LogInEntry.COLUMN_NAME_STEPS)));
                                 }else{
-
+                                    Toast.makeText(Daily_Route_Activity.this,"No data?", Toast.LENGTH_SHORT).show();
                                 }
                             }
                         });

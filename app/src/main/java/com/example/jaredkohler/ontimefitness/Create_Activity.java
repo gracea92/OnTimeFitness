@@ -109,7 +109,7 @@ public class Create_Activity extends AppCompatActivity {
             userHeight = Integer.parseInt(height.getText().toString());
             userWeight = Integer.parseInt(weight.getText().toString());
             bmi = (userWeight/(userHeight*userHeight))*703;
-            goal = 0;
+            goal = 800000;
             if(bmi<18.5){
                 goal -= 500;
             }else if(bmi >= 25 && bmi < 30){

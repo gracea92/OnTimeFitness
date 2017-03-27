@@ -23,6 +23,7 @@ import android.net.Uri;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.support.v4.app.ActivityCompat;
+import android.widget.Toast;
 
 import java.util.Timer;
 import java.util.ArrayList;
@@ -82,9 +83,8 @@ public class Select_Schedule_Activity extends AppCompatActivity {
         ArrayAdapter<Long> adapter = new ArrayAdapter<Long>(this, android.R.layout.simple_spinner_item, calendarLongID);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
         spinner.setAdapter(adapter);
-
-        spinner.setSelection(Integer.parseInt(CalendarsHelper.getCurCalID(this))-1);
-
+        int position = calendarLongID.indexOf(Long.parseLong(CalendarsHelper.getCurCalID(this)));
+        spinner.setSelection(position);
     }
 
     public void Active(View view){
@@ -95,9 +95,11 @@ public class Select_Schedule_Activity extends AppCompatActivity {
         LoginDbHelper mDbHelper = new LoginDbHelper(this);
         SQLiteDatabase db = mDbHelper.getWritableDatabase();
 
+        String scheduleId = (spinner.getSelectedItem().toString());
         ContentValues values = new ContentValues();
-        values.put(LogInContract.LogInEntry.COLUMN_NAME_CAL, Long.toString(spinner.getSelectedItemId()+ 1));
+        values.put(LogInContract.LogInEntry.COLUMN_NAME_CAL, scheduleId);
         db.update(LogInContract.LogInEntry.TABLE_NAME,values,"_id="+id,null);
+        Toast.makeText(this, "Active schedule switched to " + scheduleId, Toast.LENGTH_SHORT).show();
     }
 
     public void Edit(View view){

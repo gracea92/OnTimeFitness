@@ -225,9 +225,9 @@ public class Body_Settings_Activity extends AppCompatActivity {
 
         //Changes background color to alert user if they met their goal
         if(Integer.parseInt(savedSteps)  < savedGoal){
-            prevSteps.setBackgroundColor(Color.parseColor("#ff0000"));
+            prevSteps.setTextColor(Color.parseColor("#ff0000"));
         }else{
-            prevSteps.setBackgroundColor(Color.parseColor("#008000"));
+            prevSteps.setTextColor(Color.parseColor("#008000"));
         }
 
         save.setOnClickListener(new View.OnClickListener() {
@@ -252,6 +252,7 @@ public class Body_Settings_Activity extends AppCompatActivity {
                 values.put(LogInContract.LogInEntry.COLUMN_NAME_HEIGHT, height.getText().toString());
                 db.update(LogInContract.LogInEntry.TABLE_NAME,values,"_id="+id,null);
 
+                Toast.makeText(Body_Settings_Activity.this, "Settings saved.", Toast.LENGTH_SHORT).show();
             }
         });
     }

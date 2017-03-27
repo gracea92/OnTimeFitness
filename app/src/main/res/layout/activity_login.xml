@@ -68,6 +68,7 @@
         android:layout_marginEnd="21dp"
         android:id="@+id/button2"
         android:layout_alignTop="@+id/buttonLogin"
+        android:visibility="invisible"
         android:onClick="loadDb" />
 
 </RelativeLayout>
