@@ -113,6 +113,7 @@
         android:layout_alignEnd="@+id/editWeight"
         android:layout_alignLeft="@+id/editWeight"
         android:layout_alignStart="@+id/editWeight"
+        android:gravity="center"
         android:textAppearance="@style/TextAppearance.AppCompat.Display2"/>
 
 

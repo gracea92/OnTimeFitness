@@ -16,9 +16,9 @@
     <string name= "user">Username</string>
     <string name= "pass">Password</string>
     <string name= "confirmPass">Confirm Password</string>
-    <string name= "date">Date</string>
+    <string name= "date">Date(YYYY/MM/DD)</string>
     <string name= "location">Location</string>
-    <string name= "time">Time</string>
+    <string name= "time">Time(HH:MM)</string>
     <string name= "name">Name</string>
     <string name= "save">Save</string>
     <string name= "daily">Daily</string>

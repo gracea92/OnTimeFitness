@@ -24,7 +24,7 @@ public class Create_Activity extends AppCompatActivity {
     private int userHeight;
     private int userWeight;
     private int goal;
-    private int bmi;
+    private double bmi;
 
     @Override
     protected void onStop() {
@@ -108,8 +108,8 @@ public class Create_Activity extends AppCompatActivity {
             ContentValues values = new ContentValues();
             userHeight = Integer.parseInt(height.getText().toString());
             userWeight = Integer.parseInt(weight.getText().toString());
-            bmi = (userWeight/(userHeight*userHeight))*703;
-            goal = 0;
+            bmi = ((double) userWeight/((double) userHeight* (double) userHeight))*703;
+            int goal = 10000;
             if(bmi<18.5){
                 goal -= 500;
             }else if(bmi >= 25 && bmi < 30){

@@ -12,6 +12,17 @@
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:ems="10"
+        android:id="@+id/editUsername"
+        android:layout_alignParentTop="true"
+        android:layout_alignLeft="@+id/editWeight"
+        android:layout_alignStart="@+id/editWeight"
+        android:hint="@string/user" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:inputType="number"
         android:ems="10"
         android:layout_below="@+id/textView5"
@@ -101,17 +112,6 @@
         android:layout_alignLeft="@+id/editPassword"
         android:layout_alignStart="@+id/editPassword"
         android:hint="@string/confirmPass" />
-
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="textPersonName"
-        android:ems="10"
-        android:id="@+id/editUsername"
-        android:layout_alignParentTop="true"
-        android:layout_alignLeft="@+id/editWeight"
-        android:layout_alignStart="@+id/editWeight"
-        android:hint="@string/user" />
 
     <EditText
         android:layout_width="wrap_content"

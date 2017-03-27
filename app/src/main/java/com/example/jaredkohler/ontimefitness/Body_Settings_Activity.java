@@ -225,9 +225,9 @@ public class Body_Settings_Activity extends AppCompatActivity {
 
         //Changes background color to alert user if they met their goal
         if(Integer.parseInt(savedSteps)  < savedGoal){
-            prevSteps.setBackgroundColor(Color.parseColor("#ff0000"));
+            prevSteps.setTextColor(Color.parseColor("#ff0000"));
         }else{
-            prevSteps.setBackgroundColor(Color.parseColor("#008000"));
+            prevSteps.setTextColor(Color.parseColor("#008000"));
         }
 
         save.setOnClickListener(new View.OnClickListener() {
@@ -240,6 +240,20 @@ public class Body_Settings_Activity extends AppCompatActivity {
                 Spinner gender = (Spinner) findViewById(R.id.spinner);
                 EditText weight = (EditText) findViewById(R.id.editWeight);
                 EditText height = (EditText) findViewById(R.id.editHeight);
+                TextView prevSteps = (TextView) findViewById(R.id.textPrevSteps);
+
+                //Gets the new goal steps based on new height and weight
+                int userHeight = Integer.parseInt(height.getText().toString());
+                int userWeight = Integer.parseInt(weight.getText().toString());
+                double bmi = ((double) userWeight/((double) userHeight* (double) userHeight))*703;
+                int goal = 10000;
+                if(bmi<18.5){
+                    goal -= 500;
+                }else if(bmi >= 25 && bmi < 30){
+                    goal += 500;
+                }else if(bmi > 30){
+                    goal += 1000;
+                }
 
                 //Gets the ID of the logged in user from Shared Preferences
                 SharedPreferences sharedPreferences = getSharedPreferences(Login_Activity.MyPREFERENCES, Context.MODE_PRIVATE);
@@ -250,8 +264,17 @@ public class Body_Settings_Activity extends AppCompatActivity {
                 values.put(LogInContract.LogInEntry.COLUMN_NAME_GENDER, gender.getSelectedItem().toString());
                 values.put(LogInContract.LogInEntry.COLUMN_NAME_WEIGHT, weight.getText().toString());
                 values.put(LogInContract.LogInEntry.COLUMN_NAME_HEIGHT, height.getText().toString());
+                values.put(LogInContract.LogInEntry.COLUMN_NAME_GOAL, goal);
+
                 db.update(LogInContract.LogInEntry.TABLE_NAME,values,"_id="+id,null);
 
+                Toast.makeText(Body_Settings_Activity.this, "Settings saved.", Toast.LENGTH_SHORT).show();
+                //Changes background color to alert user if they met their goal
+                if(Integer.parseInt(prevSteps.getText().toString())  < goal){
+                    prevSteps.setTextColor(Color.parseColor("#ff0000"));
+                }else{
+                    prevSteps.setTextColor(Color.parseColor("#008000"));
+                }
             }
         });
     }
