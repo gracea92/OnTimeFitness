@@ -129,8 +129,7 @@ public class Event_Activity extends AppCompatActivity {
 
         event.addOrUpdateEvent(this,cr,values);
         Toast.makeText(this,"New event added to schedule.", Toast.LENGTH_SHORT).show();
-        Intent intent = new Intent(this, Options_Activity.class);
-        startActivity(intent);
+        finish();
     }
 
     public void exit(View view){

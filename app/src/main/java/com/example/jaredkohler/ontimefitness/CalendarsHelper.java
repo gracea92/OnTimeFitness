@@ -102,12 +102,12 @@ public class CalendarsHelper {
         return datetime;
     }
 
-    public Long currentDate(){
+    public static Long currentDate(){
         String date = new SimpleDateFormat("yyyy/MM/dd").format(new Date());
         return fromFormatToLongDate(date + " 00:00");
     }
 
-    public Long endOfCurrentDate(){
+    public static Long endOfCurrentDate(){
         return currentDate() + 86499999;
     }
 }

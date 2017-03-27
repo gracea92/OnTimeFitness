@@ -37,7 +37,7 @@ public class CalendarOnTime {
 
         // These are the Contacts rows that we will retrieve
         String[] PROJECTION = new String[] {CalendarContract.Events._ID,
-                CalendarContract.Events.TITLE, CalendarContract.Events.DTSTART};
+                CalendarContract.Events.TITLE, CalendarContract.Events.DTSTART, CalendarContract.Events.EVENT_LOCATION};
         cur = generalQuery(context, PROJECTION, SELECTION, null, CalendarContract.Events.DTSTART + " ASC");
         return cur;
     }

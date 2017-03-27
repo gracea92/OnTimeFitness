@@ -14,6 +14,7 @@ import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
+import android.provider.CalendarContract;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -212,6 +213,29 @@ public class Daily_Route_Activity extends AppCompatActivity {
                 // Add origin and destination to the map
                 Log.d(TAG, "Lat: " + origin.getLatitude() + " Long:" + origin.getLongitude());
 
+
+                CalendarOnTime cal = new CalendarOnTime(CalendarsHelper.getCurCalID(Daily_Route_Activity.this));
+                String SELECTION = CalendarContract.Events.CALENDAR_ID + " == '" + cal.getCalID() + "' AND " +
+                        CalendarContract.Events.DELETED + " != '1' AND " + CalendarContract.Events.DTSTART +
+                        " >= '" + CalendarsHelper.currentDate() + "' AND " + CalendarContract.Events.DTSTART +
+                        " < '"  + CalendarsHelper.endOfCurrentDate() +"'";
+                Cursor cur = cal.getListOfEvents(Daily_Route_Activity.this, SELECTION);
+                String addr = "";
+                while(cur.moveToNext()){
+                    Long start = Long.parseLong(cur.getString(2));
+                    Long curTime = System.currentTimeMillis();
+                    Log.d(TAG, "Start time: " + start + ", Cur time: " + curTime);
+                    if (start >= curTime) {
+                        addr = cur.getString(3);
+                    }
+                    if(!addr.equals("")){
+                        break;
+                    }
+                }
+
+                if(addr.equals("")){
+                    return;
+                }
                 getLatLongFromAddress("1858 Neil Ave, Columbus, OH 43210");
                 Position destination = Position.fromCoordinates( lng, lat);
                 mapboxMap.addMarker(new MarkerOptions()
@@ -257,10 +281,6 @@ public class Daily_Route_Activity extends AppCompatActivity {
                 // Print some info about the route
                 currentRoute = response.body().getRoutes().get(0);
                 Log.d(TAG, "Distance: " + currentRoute.getDistance());
-                Toast.makeText(
-                        Daily_Route_Activity.this,
-                        "Route is " + currentRoute.getDistance() + " meters long.",
-                        Toast.LENGTH_SHORT).show();
 
                 // Draw the route on the map
                 drawRoute(currentRoute);
