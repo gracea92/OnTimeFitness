@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -19,7 +20,7 @@ public class Options_Activity extends AppCompatActivity {
 
     private final String TAG = getClass().getSimpleName();
     public final static String EXTRA_MESSAGE = "com.example.jaredkohler.ontimefitness.Schedule_Activity";
-
+    private final DateChangedReceiver mDateChangedReceiver = new DateChangedReceiver();
 
     @Override protected void onPause(){
         super.onPause();
@@ -38,8 +39,8 @@ public class Options_Activity extends AppCompatActivity {
         Log.d(TAG, "+++ onCreate() +++");
         setContentView(R.layout.activity_options);
         //Get access for calendar
-
         CalendarsHelper.requestCalendarPermission(this);
+        launchStepService();
     }
 
     @Override

@@ -10,8 +10,12 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.os.Handler;
 import android.util.Log;
 import android.widget.Toast;
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 /**
  * Created by Andy on 3/25/2017.
@@ -24,6 +28,7 @@ public class  StepService extends IntentService implements SensorEventListener{
     private Sensor mStepCounterSensor;
     private Sensor mStepDetectorSensor;
     private final String TAG = getClass().getSimpleName();
+    Handler handler = new Handler();
 
     public StepService(){
         super("test-service");
@@ -51,6 +56,39 @@ public class  StepService extends IntentService implements SensorEventListener{
             db.update(LogInContract.LogInEntry.TABLE_NAME, values, "_id="+id,null);
         }
         Toast.makeText(getApplicationContext(), "Service Loaded", Toast.LENGTH_SHORT).show();
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while(true){
+                    try{
+                        Thread.sleep(10000);
+                        handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+
+                                //Saves the id of the logged in user
+                                SharedPreferences sharedpreferences = getSharedPreferences(Login_Activity.MyPREFERENCES, Context.MODE_PRIVATE);
+
+                                String pastDate = sharedpreferences.getString("date","null");
+                                SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
+                                String date = sdf.format(Calendar.getInstance().getTime()).split("/")[2];
+                                if(!pastDate.equals(date)){
+                                    Toast.makeText(getApplicationContext(),"New Date", Toast.LENGTH_SHORT).show();
+                                    SharedPreferences.Editor editor = sharedpreferences.edit();
+                                    editor.putString("date", date);
+                                    editor.commit();
+                                }else{
+                                    Toast.makeText(getApplicationContext(),"Same Date", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        });
+                    }catch(Exception e){
+
+                    }
+                }
+            }
+        }).start();
     }
 
 

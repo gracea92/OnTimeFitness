@@ -37,6 +37,11 @@
         <service
             android:name=".StepService"
             android:exported="false"/>
+        <receiver android:name=".DateChangedReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.DATE_CHANGED"/>
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>
