@@ -38,15 +38,13 @@
         <service
             android:name=".StepService"
             android:exported="false"/>
-<<<<<<< HEAD
+
         <receiver android:name=".DateChangedReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.DATE_CHANGED"/>
             </intent-filter>
         </receiver>
-=======
         <service android:name="com.mapbox.mapboxsdk.telemetry.TelemetryService" />
->>>>>>> origin/master
     </application>
 
 </manifest>
