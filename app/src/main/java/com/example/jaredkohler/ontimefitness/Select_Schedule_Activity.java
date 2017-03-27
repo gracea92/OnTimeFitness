@@ -103,7 +103,7 @@ public class Select_Schedule_Activity extends AppCompatActivity {
     public void Edit(View view){
         Intent intent = new Intent(this, Schedule_Activity.class);
 
-        String calID = String.valueOf(spinner.getSelectedItemId()+1);
+        String calID = String.valueOf((Long)spinner.getSelectedItem());
         intent.putExtra("calID", calID);
 
         startActivity(intent);

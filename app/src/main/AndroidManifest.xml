@@ -17,6 +17,13 @@
         <activity android:name=".Select_Schedule_Activity" />
         <activity android:name=".Daily_Route_Activity" />
         <activity android:name=".Event_Activity" />
+        <uses-library
+            android:name="com.google.android.maps" />
+        <meta-data android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyCisNtU14IW45cuVkjq-cspIXxhml8PbcQ"/>
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
         <!--
             <activity
             android:name=".Body_Settings_Activity"
