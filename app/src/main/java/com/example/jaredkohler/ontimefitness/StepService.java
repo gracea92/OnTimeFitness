@@ -56,7 +56,6 @@ public class  StepService extends IntentService implements SensorEventListener{
             values.put(LogInContract.LogInEntry.COLUMN_NAME_STEPS, -800);
             db.update(LogInContract.LogInEntry.TABLE_NAME, values, "_id="+id,null);
         }
-        Toast.makeText(getApplicationContext(), "Service Loaded", Toast.LENGTH_SHORT).show();
 
         new Thread(new Runnable() {
             @Override

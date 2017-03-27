@@ -23,6 +23,7 @@ import android.net.Uri;
 
 import android.content.ContentResolver;
 import android.widget.EditText;
+import android.widget.Toast;
 
 public class Event_Activity extends AppCompatActivity {
     private long startTime=0;
@@ -81,10 +82,19 @@ public class Event_Activity extends AppCompatActivity {
     public void save(View view){
 
         String timeString = time.getText().toString();
+        if(timeString.equals("")){
+            Toast.makeText(this,"You must enter a time.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         int startHour = Integer.parseInt(timeString.substring(0, timeString.indexOf(':')));
         int startMinute = Integer.parseInt(timeString.substring(timeString.indexOf(':') +1));
-        String fullDate = date.getText().toString();
 
+        String fullDate = date.getText().toString();
+        if(fullDate.equals("")){
+            Toast.makeText(this,"You must enter a date.", Toast.LENGTH_SHORT).show();
+            return;
+        }
         int year = Integer.parseInt(fullDate.substring(0, fullDate.indexOf('/')));
         fullDate = fullDate.substring(fullDate.indexOf('/')+1);
         int month = Integer.parseInt(fullDate.substring(0, fullDate.indexOf('/')));
@@ -101,7 +111,13 @@ public class Event_Activity extends AppCompatActivity {
         endTime.set(year, month, day, startHour + 1, startMinute);
         endMillis = endTime.getTimeInMillis();
 
-
+        if(name.getText().toString().equals("")){
+            Toast.makeText(this,"You must enter a name.", Toast.LENGTH_SHORT).show();
+            return;
+        }else if(location.getText().toString().equals("")){
+            Toast.makeText(this,"You must enter a location.", Toast.LENGTH_SHORT).show();
+            return;
+        }
         ContentResolver cr = getContentResolver();
         ContentValues values = new ContentValues();
         values.put(Events.DTSTART, startMillis);
@@ -112,7 +128,9 @@ public class Event_Activity extends AppCompatActivity {
         values.put(Events.EVENT_TIMEZONE, "America/Chicago");
 
         event.addOrUpdateEvent(this,cr,values);
-
+        Toast.makeText(this,"New event added to schedule.", Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(this, Options_Activity.class);
+        startActivity(intent);
     }
 
     public void exit(View view){

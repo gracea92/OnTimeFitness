@@ -59,6 +59,8 @@ public class Daily_Route_Activity extends AppCompatActivity {
         ViewGroup layout = (ViewGroup) findViewById(R.id.activity_schedule);
 
         TextView steps = (TextView) findViewById(R.id.textCurrent);
+        TextView goal = (TextView) findViewById(R.id.textGoal);
+        TextView expected = (TextView) findViewById(R.id.textExpect);
 
         //Gets the ID of the logged in user from Shared Preferences
         SharedPreferences sharedPreferences = getSharedPreferences(Login_Activity.MyPREFERENCES, Context.MODE_PRIVATE);
@@ -69,7 +71,7 @@ public class Daily_Route_Activity extends AppCompatActivity {
         SQLiteDatabase db = mDbHelper.getReadableDatabase();
 
         //Selects the steps column to be returned after query
-        final String[] projection = {
+        String[] projection = {
                 LogInContract.LogInEntry.COLUMN_NAME_STEPS
         };
 
@@ -88,11 +90,35 @@ public class Daily_Route_Activity extends AppCompatActivity {
                 null
         );
 
-        //Gets the steps from teh result of the query
+        //Gets the steps from the result of the query
         if(cursor.moveToNext()){
             steps.setText(cursor.getString(cursor.getColumnIndex(LogInContract.LogInEntry.COLUMN_NAME_STEPS)));
         }else{
             Toast.makeText(this, "Failed to get number of steps", Toast.LENGTH_SHORT).show();
+            intent = new Intent(this, Login_Activity.class);
+            startActivity(intent);
+        }
+
+        //Selects the goal column to be returned after query
+        projection[0] = LogInContract.LogInEntry.COLUMN_NAME_GOAL;
+
+
+        //Query the database with the setting set above
+        cursor = db.query(
+                LogInContract.LogInEntry.TABLE_NAME,
+                projection,
+                selection,
+                selectionArgs,
+                null,
+                null,
+                null
+        );
+
+        //Gets the goal from the result of the query
+        if(cursor.moveToNext()){
+            goal.setText(cursor.getString(cursor.getColumnIndex(LogInContract.LogInEntry.COLUMN_NAME_GOAL)));
+        }else{
+            Toast.makeText(this, "Failed to get goal number of steps", Toast.LENGTH_SHORT).show();
             intent = new Intent(this, Login_Activity.class);
             startActivity(intent);
         }
