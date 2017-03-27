@@ -3,14 +3,15 @@
     package="com.example.jaredkohler.ontimefitness">
     <uses-permission android:name="android.permission.READ_CALENDAR" />
     <uses-permission android:name="android.permission.WRITE_CALENDAR" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <uses-permission android:name="android.permission.READ_CALENDAR" />
-        <uses-permission android:name="android.permission.WRITE_CALENDAR" />
+
         <activity android:name=".Options_Activity" />
         <activity android:name=".Schedule_Activity" />
         <activity android:name=".Select_Schedule_Activity" />
@@ -37,11 +38,15 @@
         <service
             android:name=".StepService"
             android:exported="false"/>
+<<<<<<< HEAD
         <receiver android:name=".DateChangedReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.DATE_CHANGED"/>
             </intent-filter>
         </receiver>
+=======
+        <service android:name="com.mapbox.mapboxsdk.telemetry.TelemetryService" />
+>>>>>>> origin/master
     </application>
 
 </manifest>

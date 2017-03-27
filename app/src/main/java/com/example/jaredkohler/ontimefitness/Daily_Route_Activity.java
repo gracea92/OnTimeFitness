@@ -1,12 +1,16 @@
 package com.example.jaredkohler.ontimefitness;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Handler;
 import android.os.SystemClock;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -15,16 +19,26 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.mapbox.mapboxsdk.MapboxAccountManager;
+import com.mapbox.mapboxsdk.maps.MapView;
+import com.mapbox.mapboxsdk.maps.MapboxMap;
+import com.mapbox.services.directions.v5.models.DirectionsRoute;
+
 public class Daily_Route_Activity extends AppCompatActivity {
     long startTime;
     private final String TAG = getClass().getSimpleName();
     Handler handler = new Handler();
+
+    private MapView mapView;
+    private MapboxMap map;
+    private DirectionsRoute currentRoute;
 
     @Override
     protected void onStop() {
         super.onStop();
         Log.d(TAG, "+++ onStop() +++");
         startTime = SystemClock.elapsedRealtime();
+
     }
 
     @Override
@@ -137,8 +151,53 @@ public class Daily_Route_Activity extends AppCompatActivity {
                 }
             }
         }).start();
+
+
+
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+                ContextCompat.checkSelfPermission(this,
+                        Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION},
+                    279);
+
+        }
+        MapboxAccountManager.start(this, getString(R.string.access_token));
+        mapView = (MapView) findViewById(R.id.mapView);
+        mapView.onCreate(savedInstanceState);
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        mapView.onResume();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        mapView.onPause();
+    }
+
+    @Override
+    public void onLowMemory() {
+        super.onLowMemory();
+        mapView.onLowMemory();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mapView.onDestroy();
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        mapView.onSaveInstanceState(outState);
+    }
     public void Exit(View view) {
         finish();
     }
