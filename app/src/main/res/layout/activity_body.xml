@@ -91,4 +91,29 @@
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="14dp" />
 
+    <TextView
+        android:text="@string/prevSteps"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="28dp"
+        android:id="@+id/textView6"
+        android:gravity="center"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body2"/>
+
+    <TextView
+        android:text="TextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textView6"
+        android:layout_marginTop="26dp"
+        android:id="@+id/textPrevSteps"
+        android:layout_alignRight="@+id/editWeight"
+        android:layout_alignEnd="@+id/editWeight"
+        android:layout_alignLeft="@+id/editWeight"
+        android:layout_alignStart="@+id/editWeight"
+        android:textAppearance="@style/TextAppearance.AppCompat.Display2"/>
+
+
 </RelativeLayout>

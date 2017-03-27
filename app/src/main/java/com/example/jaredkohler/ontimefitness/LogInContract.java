@@ -14,7 +14,8 @@ public final class LogInContract {
         public static final String COLUMN_NAME_GENDER = "gender";
         public static final String COLUMN_NAME_STEPS = "steps";
         public static final String COLUMN_NAME_CAL = "cal";
-
+        public static final String COLUMN_NAME_PREVSTEPS = "prevSteps";
+        public static final String COLUMN_NAME_GOAL = "goal";
     }
 
 }

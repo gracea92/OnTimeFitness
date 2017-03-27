@@ -21,6 +21,10 @@ import java.util.List;
 public class Create_Activity extends AppCompatActivity {
     long startTime;
     private final String TAG = getClass().getSimpleName();
+    private int userHeight;
+    private int userWeight;
+    private int goal;
+    private int bmi;
 
     @Override
     protected void onStop() {
@@ -102,6 +106,17 @@ public class Create_Activity extends AppCompatActivity {
         }else{
             //Adds the user's inputted values into
             ContentValues values = new ContentValues();
+            userHeight = Integer.parseInt(height.getText().toString());
+            userWeight = Integer.parseInt(weight.getText().toString());
+            bmi = (userWeight/(userHeight*userHeight))*703;
+            goal = 0;
+            if(bmi<18.5){
+                goal -= 500;
+            }else if(bmi >= 25 && bmi < 30){
+                goal += 500;
+            }else if(bmi > 30){
+                goal += 1000;
+            }
             values.put(LogInContract.LogInEntry.COLUMN_NAME_TITLE, username.getText().toString());
             values.put(LogInContract.LogInEntry.COLUMN_NAME_SUBTITLE, password.getText().toString());
             values.put(LogInContract.LogInEntry.COLUMN_NAME_WEIGHT, weight.getText().toString());
@@ -109,6 +124,8 @@ public class Create_Activity extends AppCompatActivity {
             values.put(LogInContract.LogInEntry.COLUMN_NAME_GENDER, gender.getSelectedItem().toString());
             values.put(LogInContract.LogInEntry.COLUMN_NAME_STEPS, "0");
             values.put(LogInContract.LogInEntry.COLUMN_NAME_CAL, "1");
+            values.put(LogInContract.LogInEntry.COLUMN_NAME_PREVSTEPS, "0");
+            values.put(LogInContract.LogInEntry.COLUMN_NAME_GOAL, goal);
             long newRowId = db.insert(LogInContract.LogInEntry.TABLE_NAME, null, values);
 
             //Loads the login activity

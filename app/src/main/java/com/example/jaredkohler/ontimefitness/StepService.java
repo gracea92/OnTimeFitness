@@ -5,6 +5,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -74,12 +75,47 @@ public class  StepService extends IntentService implements SensorEventListener{
                                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
                                 String date = sdf.format(Calendar.getInstance().getTime()).split("/")[2];
                                 if(!pastDate.equals(date)){
-                                    Toast.makeText(getApplicationContext(),"New Date", Toast.LENGTH_SHORT).show();
+                                    //Gets the ID of the logged in user from Shared Preferences
+                                    SharedPreferences sharedPreferences = getSharedPreferences(Login_Activity.MyPREFERENCES, Context.MODE_PRIVATE);
+                                    String id = sharedPreferences.getString("ID",null);
+
+                                    //Gets data repository in read mode
+                                    final LoginDbHelper mDbHelper = new LoginDbHelper(StepService.this);
+                                    SQLiteDatabase db = mDbHelper.getReadableDatabase();
+
+                                    //Selects the current steps column to be returned after query
+                                    final String[] projection = {
+                                            LogInContract.LogInEntry.COLUMN_NAME_STEPS
+                                    };
+                                    //Filters the results where the id is equal to the logged in users id
+                                    String selection = LogInContract.LogInEntry._ID + " = ?";
+                                    String[] selectionArgs = {id};
+
+                                    //Query the database with the settings set above
+                                    Cursor cursor = db.query(
+                                            LogInContract.LogInEntry.TABLE_NAME,
+                                            projection,
+                                            selection,
+                                            selectionArgs,
+                                            null,
+                                            null,
+                                            null
+                                    );
+
+                                    //Gets the steps from the previous day
+                                    cursor.moveToNext();
+                                    String prevSteps = cursor.getString(cursor.getColumnIndex(LogInContract.LogInEntry.COLUMN_NAME_STEPS));
+
+                                    //Updates the previous day steps and resets the current day steps
+                                    ContentValues values = new ContentValues();
+                                    values.put(LogInContract.LogInEntry.COLUMN_NAME_PREVSTEPS, prevSteps);
+                                    values.put(LogInContract.LogInEntry.COLUMN_NAME_STEPS, "0");
+                                    db.update(LogInContract.LogInEntry.TABLE_NAME,values,"_id="+id,null);
+
+                                    //Updates the saved date to the current date.
                                     SharedPreferences.Editor editor = sharedpreferences.edit();
                                     editor.putString("date", date);
                                     editor.commit();
-                                }else{
-                                    Toast.makeText(getApplicationContext(),"Same Date", Toast.LENGTH_SHORT).show();
                                 }
                             }
                         });

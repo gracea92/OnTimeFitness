@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Color;
 import android.os.SystemClock;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -16,6 +17,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class Body_Settings_Activity extends AppCompatActivity {
@@ -24,6 +26,8 @@ public class Body_Settings_Activity extends AppCompatActivity {
     String savedGender;
     String savedWeight;
     String savedHeight;
+    String savedSteps;
+    int savedGoal;
 
     @Override
     protected void onStop() {
@@ -53,6 +57,7 @@ public class Body_Settings_Activity extends AppCompatActivity {
         EditText weight = (EditText) findViewById(R.id.editWeight);
         EditText height = (EditText) findViewById(R.id.editHeight);
         Button save = (Button) findViewById(R.id.editCreate);
+        TextView prevSteps = (TextView) findViewById(R.id.textPrevSteps);
 
         //Sets up the spinner
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.gender_array, android.R.layout.simple_spinner_item);
@@ -164,6 +169,66 @@ public class Body_Settings_Activity extends AppCompatActivity {
 
         //Sets the displayed height equal to the user's height
         height.setText(savedHeight);
+
+        /*
+            This part is to set the yesterday's steps text field equal to the correct value
+         */
+
+        //Changes the projection to return the previous steps column
+        projection[0] = LogInContract.LogInEntry.COLUMN_NAME_PREVSTEPS;
+
+        //Query the database with the new  column
+        cursor = db.query(
+                LogInContract.LogInEntry.TABLE_NAME,
+                projection,
+                selection,
+                selectionArgs,
+                null,
+                null,
+                null
+        );
+
+        //Gets the yesterday's steps from the result of the query
+        if(cursor.moveToNext()){
+            savedSteps = cursor.getString(cursor.getColumnIndex(LogInContract.LogInEntry.COLUMN_NAME_PREVSTEPS));
+        }else{
+            //Loads the login page if teh query returns nothing
+            intent = new Intent(this, Login_Activity.class);
+            startActivity(intent);
+        }
+
+        //Sets the displayed height equal to the user's height
+        prevSteps.setText(savedSteps);
+
+        //Changes the projection to return the goal column
+        projection[0] = LogInContract.LogInEntry.COLUMN_NAME_GOAL;
+
+        //Query the database with the new  column
+        cursor = db.query(
+                LogInContract.LogInEntry.TABLE_NAME,
+                projection,
+                selection,
+                selectionArgs,
+                null,
+                null,
+                null
+        );
+
+        //Gets the yesterday's steps from the result of the query
+        if(cursor.moveToNext()){
+            savedGoal = cursor.getInt(cursor.getColumnIndex(LogInContract.LogInEntry.COLUMN_NAME_GOAL));
+        }else{
+            //Loads the login page if teh query returns nothing
+            intent = new Intent(this, Login_Activity.class);
+            startActivity(intent);
+        }
+
+        //Changes background color to alert user if they met their goal
+        if(Integer.parseInt(savedSteps)  < savedGoal){
+            prevSteps.setBackgroundColor(Color.parseColor("#ff0000"));
+        }else{
+            prevSteps.setBackgroundColor(Color.parseColor("#008000"));
+        }
 
         save.setOnClickListener(new View.OnClickListener() {
             @Override
