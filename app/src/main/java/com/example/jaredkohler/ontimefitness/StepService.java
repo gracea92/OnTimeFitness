@@ -50,9 +50,6 @@ public class  StepService extends IntentService implements SensorEventListener{
             values.put(LogInContract.LogInEntry.COLUMN_NAME_STEPS, -800);
             db.update(LogInContract.LogInEntry.TABLE_NAME, values, "_id="+id,null);
         }
-        //mStepDetectorSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_STEP_DETECTOR);
-
-        //mSensorManager.registerListener(this, mStepDetectorSensor, mSensorManager.SENSOR_DELAY_NORMAL);
         Toast.makeText(getApplicationContext(), "Service Loaded", Toast.LENGTH_SHORT).show();
     }
 
@@ -63,32 +60,16 @@ public class  StepService extends IntentService implements SensorEventListener{
         SharedPreferences sharedPreferences = getSharedPreferences(Login_Activity.MyPREFERENCES, Context.MODE_PRIVATE);
         String id = sharedPreferences.getString("ID",null);
 
+        //Updates the database with the new amount of steps
         ContentValues values = new ContentValues();
-        /*Sensor sensor = event.sensor;
-        float[] steps = event.values;
-        int step = -1;
-
-        if(steps.length > 0){
-            step = (int) steps[0];
-        }
-
-        if(sensor.getType() == Sensor.TYPE_STEP_COUNTER){
-            values.put(LogInContract.LogInEntry.COLUMN_NAME_STEPS, step);
-        }*/
-
-        values.put(LogInContract.LogInEntry.COLUMN_NAME_STEPS, event.values[0]);
+        values.put(LogInContract.LogInEntry.COLUMN_NAME_STEPS, Math.round(event.values[0]));
         db.update(LogInContract.LogInEntry.TABLE_NAME, values, "_id="+id,null);
+
     }
 
     @Override
     protected void onHandleIntent(Intent intent){
-        //Gets the ID of the logged in user from Shared Preferences
-        /*SharedPreferences sharedPreferences = getSharedPreferences(Login_Activity.MyPREFERENCES, Context.MODE_PRIVATE);
-        String id = sharedPreferences.getString("ID",null);
 
-        ContentValues values = new ContentValues();
-        values.put(LogInContract.LogInEntry.COLUMN_NAME_STEPS, 3);
-        db.update(LogInContract.LogInEntry.TABLE_NAME, values, "_id="+id,null);*/
     }
 
     public void onAccuracyChanged(Sensor sensor, int accuracy){
