@@ -39,6 +39,7 @@
     <string name= "selectSchedule">Select Schedule</string>
     <string name= "addEvent">Add Event</string>
     <string name= "editEvent">Edit Event</string>
+    <string name="access_token">pk.eyJ1IjoiamFyZWRma29obGVyIiwiYSI6ImNqMHJnanB0aDAyYmQycW13enV6bzdnc3EifQ._1to2HHJcHsHVbIHtjWj8Q</string>
     <string-array name= "gender_array">
         <item>Male</item>
         <item>Female</item>
