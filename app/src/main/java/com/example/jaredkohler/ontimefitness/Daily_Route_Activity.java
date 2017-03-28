@@ -248,20 +248,21 @@ public class Daily_Route_Activity extends AppCompatActivity {
                 Log.d(TAG, "Lat: " + origin.getLatitude() + " Long:" + origin.getLongitude());
 
 
-                cur.moveToFirst();
-                String addr = "";
-                do{
-                    Long start = Long.parseLong(cur.getString(2));
-                    Long curTime = System.currentTimeMillis();
-                    Log.d(TAG, "Start time: " + start + ", Cur time: " + curTime);
-                    if (start >= curTime) {
-                        addr = cur.getString(3);
-                    }
-                    if(!addr.equals("")){
-                        break;
-                    }
-                } while(cur.moveToNext());
 
+                String addr = "";
+                if(cur.moveToFirst()) {
+                    do {
+                        Long start = Long.parseLong(cur.getString(2));
+                        Long curTime = System.currentTimeMillis();
+                        Log.d(TAG, "Start time: " + start + ", Cur time: " + curTime);
+                        if (start >= curTime) {
+                            addr = cur.getString(3);
+                        }
+                        if (!addr.equals("")) {
+                            break;
+                        }
+                    } while (cur.moveToNext());
+                }
                 if(addr.equals("")){
                     return;
                 }
@@ -291,22 +292,19 @@ public class Daily_Route_Activity extends AppCompatActivity {
             Long start = Long.parseLong(cur.getString(2));
             Long curTime = System.currentTimeMillis();
             Log.d(TAG, "Start time: " + start + ", Cur time: " + curTime);
-            if (start >= curTime) {
-                addr = cur.getString(3);
-                if(!addr.equals("")){
-                    getLatLongFromAddress(addr);
-                    Position destination = Position.fromCoordinates( lng, lat);
+            addr = cur.getString(3);
+            if(!addr.equals("")){
+                getLatLongFromAddress(addr);
+                Position destination = Position.fromCoordinates( lng, lat);
 
-                    // Get route from API for just calculation
-                    try {
-                        getRoute(origin, destination, true);
-                        origin = destination;
-                    } catch (ServicesException servicesException) {
-                        servicesException.printStackTrace();
-                    }
+                // Get route from API for just calculation
+                try {
+                    getRoute(origin, destination, true);
+                    origin = destination;
+                } catch (ServicesException servicesException) {
+                    servicesException.printStackTrace();
                 }
             }
-
         }
     }
 
