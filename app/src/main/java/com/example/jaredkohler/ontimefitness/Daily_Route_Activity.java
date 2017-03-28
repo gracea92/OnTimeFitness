@@ -62,6 +62,9 @@ public class Daily_Route_Activity extends AppCompatActivity {
     private DirectionsRoute currentRoute;
     private LocationServices locationServices;
     double lat= 0.0, lng= 0.0;
+    double dist = 0.0;
+    private Cursor cur;
+    TextView current;
 
     @Override
     protected void onStop() {
@@ -203,6 +206,12 @@ public class Daily_Route_Activity extends AppCompatActivity {
         mapView = (MapView) findViewById(R.id.mapView);
         mapView.onCreate(savedInstanceState);
 
+        CalendarOnTime cal = new CalendarOnTime(CalendarsHelper.getCurCalID(Daily_Route_Activity.this));
+        String SELECTION = CalendarContract.Events.CALENDAR_ID + " == '" + cal.getCalID() + "' AND " +
+                CalendarContract.Events.DELETED + " != '1' AND " + CalendarContract.Events.DTSTART +
+                " >= '" + CalendarsHelper.currentDate() + "' AND " + CalendarContract.Events.DTSTART +
+                " < '"  + CalendarsHelper.endOfCurrentDate() +"'";
+        cur = cal.getListOfEvents(Daily_Route_Activity.this, SELECTION);
         mapView.getMapAsync(new OnMapReadyCallback() {
             @Override
             public void onMapReady(MapboxMap mapboxMap) {
@@ -214,14 +223,9 @@ public class Daily_Route_Activity extends AppCompatActivity {
                 Log.d(TAG, "Lat: " + origin.getLatitude() + " Long:" + origin.getLongitude());
 
 
-                CalendarOnTime cal = new CalendarOnTime(CalendarsHelper.getCurCalID(Daily_Route_Activity.this));
-                String SELECTION = CalendarContract.Events.CALENDAR_ID + " == '" + cal.getCalID() + "' AND " +
-                        CalendarContract.Events.DELETED + " != '1' AND " + CalendarContract.Events.DTSTART +
-                        " >= '" + CalendarsHelper.currentDate() + "' AND " + CalendarContract.Events.DTSTART +
-                        " < '"  + CalendarsHelper.endOfCurrentDate() +"'";
-                Cursor cur = cal.getListOfEvents(Daily_Route_Activity.this, SELECTION);
+                cur.moveToFirst();
                 String addr = "";
-                while(cur.moveToNext()){
+                do{
                     Long start = Long.parseLong(cur.getString(2));
                     Long curTime = System.currentTimeMillis();
                     Log.d(TAG, "Start time: " + start + ", Cur time: " + curTime);
@@ -231,12 +235,12 @@ public class Daily_Route_Activity extends AppCompatActivity {
                     if(!addr.equals("")){
                         break;
                     }
-                }
+                } while(cur.moveToNext());
 
                 if(addr.equals("")){
                     return;
                 }
-                getLatLongFromAddress("1858 Neil Ave, Columbus, OH 43210");
+                getLatLongFromAddress(addr);
                 Position destination = Position.fromCoordinates( lng, lat);
                 mapboxMap.addMarker(new MarkerOptions()
                         .position(new LatLng(destination.getLatitude(), destination.getLongitude()))
@@ -245,18 +249,43 @@ public class Daily_Route_Activity extends AppCompatActivity {
 
                 // Get route from API
                 try {
-                    getRoute(origin, destination);
+                    getRoute(origin, destination ,false);
                 } catch (ServicesException servicesException) {
                     servicesException.printStackTrace();
                 }
 
             }
         });
+        current = (TextView) findViewById(R.id.textExpect);
 
+        //Calculate expected steps.
+        Position origin = Position.fromCoordinates(LocationServices.getLocationServices(Daily_Route_Activity.this)
+                .getLastLocation().getLongitude(), LocationServices.getLocationServices(Daily_Route_Activity.this).getLastLocation().getLatitude());
+        while(cur.moveToNext()){
+            String addr ="";
+            Long start = Long.parseLong(cur.getString(2));
+            Long curTime = System.currentTimeMillis();
+            Log.d(TAG, "Start time: " + start + ", Cur time: " + curTime);
+            if (start >= curTime) {
+                addr = cur.getString(3);
+                if(!addr.equals("")){
+                    getLatLongFromAddress(addr);
+                    Position destination = Position.fromCoordinates( lng, lat);
 
+                    // Get route from API for just calculation
+                    try {
+                        getRoute(origin, destination, true);
+                        origin = destination;
+                    } catch (ServicesException servicesException) {
+                        servicesException.printStackTrace();
+                    }
+                }
+            }
+
+        }
     }
 
-    private void getRoute(Position origin, Position destination) throws ServicesException {
+    private void getRoute(Position origin, Position destination, boolean Calc) throws ServicesException {
 
         MapboxDirections client = new MapboxDirections.Builder()
                 .setOrigin(origin)
@@ -265,33 +294,67 @@ public class Daily_Route_Activity extends AppCompatActivity {
                 .setAccessToken(MapboxAccountManager.getInstance().getAccessToken())
                 .build();
 
-        client.enqueueCall(new Callback<DirectionsResponse>() {
-            @Override
-            public void onResponse(Call<DirectionsResponse> call, Response<DirectionsResponse> response) {
-                // You can get the generic HTTP info about the response
-                Log.d(TAG, "Response code: " + response.code());
-                if (response.body() == null) {
-                    Log.e(TAG, "No routes found, make sure you set the right user and access token.");
-                    return;
-                } else if (response.body().getRoutes().size() < 1) {
-                    Log.e(TAG, "No routes found");
-                    return;
+        if(Calc){
+            client.enqueueCall(new Callback<DirectionsResponse>() {
+                @Override
+                public void onResponse(Call<DirectionsResponse> call, Response<DirectionsResponse> response) {
+                    // You can get the generic HTTP info about the response
+                    Log.d(TAG, "Response code: " + response.code());
+
+                    if (response.body() == null) {
+                        Log.e(TAG, "No routes found, make sure you set the right user and access token.");
+                        return;
+                    } else if (response.body().getRoutes().size() < 1) {
+                        Log.e(TAG, "No routes found");
+                        return;
+                    }
+
+                    // Print some info about the route
+                    currentRoute = response.body().getRoutes().get(0);
+                    Log.d(TAG, "Distance: " + currentRoute.getDistance());
+
+                    dist = dist + currentRoute.getDistance() *1.3;
+
+                    current.setText(String.valueOf((int)dist));
+
                 }
 
-                // Print some info about the route
-                currentRoute = response.body().getRoutes().get(0);
-                Log.d(TAG, "Distance: " + currentRoute.getDistance());
+                @Override
+                public void onFailure(Call<DirectionsResponse> call, Throwable throwable) {
+                    Log.e(TAG, "Error: " + throwable.getMessage());
+                    Toast.makeText(Daily_Route_Activity.this, "Error: " + throwable.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            });
+        }else{
+            client.enqueueCall(new Callback<DirectionsResponse>() {
+                @Override
+                public void onResponse(Call<DirectionsResponse> call, Response<DirectionsResponse> response) {
+                    // You can get the generic HTTP info about the response
+                    Log.d(TAG, "Response code: " + response.code());
 
-                // Draw the route on the map
-                drawRoute(currentRoute);
-            }
+                    if (response.body() == null) {
+                        Log.e(TAG, "No routes found, make sure you set the right user and access token.");
+                        return;
+                    } else if (response.body().getRoutes().size() < 1) {
+                        Log.e(TAG, "No routes found");
+                        return;
+                    }
 
-            @Override
-            public void onFailure(Call<DirectionsResponse> call, Throwable throwable) {
-                Log.e(TAG, "Error: " + throwable.getMessage());
-                Toast.makeText(Daily_Route_Activity.this, "Error: " + throwable.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-        });
+                    // Print some info about the route
+                    currentRoute = response.body().getRoutes().get(0);
+                    Log.d(TAG, "Distance: " + currentRoute.getDistance());
+                    // Draw the route on the map
+                    drawRoute(currentRoute);
+                }
+
+                @Override
+                public void onFailure(Call<DirectionsResponse> call, Throwable throwable) {
+                    Log.e(TAG, "Error: " + throwable.getMessage());
+                    Toast.makeText(Daily_Route_Activity.this, "Error: " + throwable.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+
     }
 
     private void drawRoute(DirectionsRoute route) {
