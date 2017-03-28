@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 /**
  * Created by Andy on 3/25/2017.
@@ -71,8 +72,7 @@ public class  StepService extends IntentService implements SensorEventListener{
                                 SharedPreferences sharedpreferences = getSharedPreferences(Login_Activity.MyPREFERENCES, Context.MODE_PRIVATE);
 
                                 String pastDate = sharedpreferences.getString("date","null");
-                                SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
-                                String date = sdf.format(Calendar.getInstance().getTime()).split("/")[2];
+                                String date = new SimpleDateFormat("yyyy/MM/dd").format(new Date());
                                 if(!pastDate.equals(date)){
                                     //Gets the ID of the logged in user from Shared Preferences
                                     SharedPreferences sharedPreferences = getSharedPreferences(Login_Activity.MyPREFERENCES, Context.MODE_PRIVATE);
