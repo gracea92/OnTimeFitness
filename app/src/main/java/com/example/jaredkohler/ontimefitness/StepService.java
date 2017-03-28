@@ -79,11 +79,11 @@ public class  StepService extends IntentService implements SensorEventListener{
                                     String id = sharedPreferences.getString("ID",null);
 
                                     //Gets data repository in read mode
-                                    final LoginDbHelper mDbHelper = new LoginDbHelper(StepService.this);
-                                    SQLiteDatabase db = mDbHelper.getReadableDatabase();
+                                    LoginDbHelper mDbHelper = new LoginDbHelper(StepService.this);
+                                    SQLiteDatabase db = mDbHelper.getWritableDatabase();
 
                                     //Selects the current steps column to be returned after query
-                                    final String[] projection = {
+                                    String[] projection = {
                                             LogInContract.LogInEntry.COLUMN_NAME_STEPS
                                     };
                                     //Filters the results where the id is equal to the logged in users id
@@ -133,10 +133,39 @@ public class  StepService extends IntentService implements SensorEventListener{
         SharedPreferences sharedPreferences = getSharedPreferences(Login_Activity.MyPREFERENCES, Context.MODE_PRIVATE);
         String id = sharedPreferences.getString("ID",null);
 
-        //Updates the database with the new amount of steps
+        //Gets data repository in write mode
+        LoginDbHelper mDbHelper = new LoginDbHelper(StepService.this);
+        SQLiteDatabase db = mDbHelper.getWritableDatabase();
+
+        //Selects the current steps column to be returned after query
+        String[] projection = {
+                LogInContract.LogInEntry.COLUMN_NAME_STEPS
+        };
+        //Filters the results where the id is equal to the logged in users id
+        String selection = LogInContract.LogInEntry._ID + " = ?";
+        String[] selectionArgs = {id};
+
+        //Query the database with the settings set above
+        Cursor cursor = db.query(
+                LogInContract.LogInEntry.TABLE_NAME,
+                projection,
+                selection,
+                selectionArgs,
+                null,
+                null,
+                null
+        );
+
+        //Gets the steps from the previous day
+        cursor.moveToNext();
+        String prevSteps = cursor.getString(cursor.getColumnIndex(LogInContract.LogInEntry.COLUMN_NAME_STEPS));
+
+        //Updates the previous day steps and resets the current day steps
         ContentValues values = new ContentValues();
-        values.put(LogInContract.LogInEntry.COLUMN_NAME_STEPS, Math.round(event.values[0]));
-        db.update(LogInContract.LogInEntry.TABLE_NAME, values, "_id="+id,null);
+        values.put(LogInContract.LogInEntry.COLUMN_NAME_STEPS, Integer.parseInt(prevSteps)+1);
+        db.update(LogInContract.LogInEntry.TABLE_NAME,values,"_id="+id,null);
+
+
 
     }
 
