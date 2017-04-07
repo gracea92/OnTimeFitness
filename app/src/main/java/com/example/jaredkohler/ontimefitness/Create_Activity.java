@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.SystemClock;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -14,9 +15,17 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Array;
+import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.crypto.Cipher;
+import javax.crypto.SecretKey;
+import javax.crypto.SecretKeyFactory;
+import javax.crypto.spec.PBEKeySpec;
+import javax.crypto.spec.PBEParameterSpec;
 
 public class Create_Activity extends AppCompatActivity {
     long startTime;
@@ -54,7 +63,7 @@ public class Create_Activity extends AppCompatActivity {
         spinner.setAdapter(adapter);
     }
 
-    public void createUser(View view){
+    public void createUser(View view) throws Exception{
         //Gets the user inputted settings
         EditText username = (EditText) findViewById(R.id.editUsername);
         EditText password = (EditText) findViewById(R.id.editPassword);
@@ -117,8 +126,10 @@ public class Create_Activity extends AppCompatActivity {
             }else if(bmi > 30){
                 goal += 1000;
             }
+
+            String encoded = encrypt(password.getText().toString());
             values.put(LogInContract.LogInEntry.COLUMN_NAME_TITLE, username.getText().toString());
-            values.put(LogInContract.LogInEntry.COLUMN_NAME_SUBTITLE, password.getText().toString());
+            values.put(LogInContract.LogInEntry.COLUMN_NAME_SUBTITLE, encoded);
             values.put(LogInContract.LogInEntry.COLUMN_NAME_WEIGHT, weight.getText().toString());
             values.put(LogInContract.LogInEntry.COLUMN_NAME_HEIGHT, height.getText().toString());
             values.put(LogInContract.LogInEntry.COLUMN_NAME_GENDER, gender.getSelectedItem().toString());
@@ -136,5 +147,16 @@ public class Create_Activity extends AppCompatActivity {
 
     public void Exit(View view){
         finish();
+    }
+
+    private static String encrypt(String toBeEncrypt) throws GeneralSecurityException, UnsupportedEncodingException {
+        byte[] data = null;
+        try {
+            data = toBeEncrypt.getBytes("UTF-8");
+        } catch (UnsupportedEncodingException e){
+            e.printStackTrace();
+        }
+
+        return Base64.encodeToString(data, Base64.DEFAULT);
     }
 }

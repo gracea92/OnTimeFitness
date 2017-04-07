@@ -12,11 +12,14 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Base64;
 import android.view.View;
 import android.widget.Toast;
 import android.util.Log;
 import android.widget.EditText;
 
+import java.io.UnsupportedEncodingException;
+import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,7 +45,7 @@ public class Login_Activity extends AppCompatActivity {
     }
 
 
-    public void login(View view){
+    public void login(View view) throws Exception{
         //Gets the user inputted username and password
         EditText username = (EditText) findViewById(R.id.editName);
         EditText password = (EditText)findViewById(R.id.editPassword);
@@ -89,7 +92,7 @@ public class Login_Activity extends AppCompatActivity {
             //Changes the selection to username = input username and password = input password
             selection = LogInContract.LogInEntry.COLUMN_NAME_TITLE + " = \"" + username.getText().toString()
                     + "\" AND " +LogInContract.LogInEntry.COLUMN_NAME_SUBTITLE + " = ?";
-            selectionArgs[0]  = password.getText().toString();
+            selectionArgs[0]  = encrypt(password.getText().toString());
 
             //Query the database with new settings
             cursor = db.query(
@@ -141,5 +144,16 @@ public class Login_Activity extends AppCompatActivity {
     public void loadDb(View view){
         Intent dbmanager = new Intent(this, AndroidDatabaseManager.class);
         startActivity(dbmanager);
+    }
+
+    private static String encrypt(String toBeEncrypt) throws GeneralSecurityException, UnsupportedEncodingException {
+        byte[] data = null;
+        try {
+            data = toBeEncrypt.getBytes("UTF-8");
+        } catch (UnsupportedEncodingException e){
+            e.printStackTrace();
+        }
+
+        return Base64.encodeToString(data, Base64.DEFAULT);
     }
 }

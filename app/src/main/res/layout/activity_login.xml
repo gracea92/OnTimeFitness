@@ -59,16 +59,16 @@
         android:onClick="loadCreateUser"/>
 
     <Button
-        android:text="@string/viewData"
+        android:id="@+id/button2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/buttonLogin"
+        android:layout_marginEnd="21dp"
+        android:layout_marginRight="21dp"
         android:layout_toLeftOf="@+id/buttonLogin"
         android:layout_toStartOf="@+id/buttonLogin"
-        android:layout_marginRight="21dp"
-        android:layout_marginEnd="21dp"
-        android:id="@+id/button2"
-        android:layout_alignTop="@+id/buttonLogin"
-        android:visibility="invisible"
-        android:onClick="loadDb" />
+        android:onClick="loadDb"
+        android:text="@string/viewData"
+        android:visibility="visible"/>
 
 </RelativeLayout>
