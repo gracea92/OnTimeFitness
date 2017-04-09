@@ -9,8 +9,10 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.location.Address;
+import android.location.Criteria;
 import android.location.Geocoder;
 import android.location.Location;
+import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -90,16 +92,7 @@ public class Daily_Route_Activity extends AppCompatActivity {
         Log.d(TAG, "+++ onCreate() +++");
         setContentView(R.layout.activity_route);
 
-        if (ContextCompat.checkSelfPermission(this,
-                Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
-                ContextCompat.checkSelfPermission(this,
-                        Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
 
-            ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION},
-                    279);
-
-        }
 
         Intent intent = getIntent();
         ViewGroup layout = (ViewGroup) findViewById(R.id.activity_schedule);
@@ -225,9 +218,6 @@ public class Daily_Route_Activity extends AppCompatActivity {
 
         MapboxAccountManager.start(this, getString(R.string.access_token));
 
-        // Get the location engine object for later use.
-
-
         mapView = (MapView) findViewById(R.id.mapView);
         mapView.onCreate(savedInstanceState);
 
@@ -242,7 +232,6 @@ public class Daily_Route_Activity extends AppCompatActivity {
             public void onMapReady(MapboxMap mapboxMap) {
                 map = mapboxMap;
                 toggleGps(true);
-
 
                 String addr = "";
                 if(cur.moveToFirst()) {
@@ -267,7 +256,7 @@ public class Daily_Route_Activity extends AppCompatActivity {
                         .position(new LatLng(destination.getLatitude(), destination.getLongitude()))
                         .title("Destination")
                         .snippet("Destination"));
-                Location lastLocation = LocationServices.getLocationServices(Daily_Route_Activity.this).getLastLocation();
+                Location lastLocation = Daily_Route_Activity.this.getCheapLocation(Daily_Route_Activity.this);
                 if(lastLocation == null){
                     return;
                 }
@@ -290,7 +279,7 @@ public class Daily_Route_Activity extends AppCompatActivity {
             //@Override
            //public void run() {
                 //Calculate expected steps.
-                Location lastLocation = LocationServices.getLocationServices(Daily_Route_Activity.this).getLastLocation();
+                Location lastLocation = Daily_Route_Activity.this.getCheapLocation(Daily_Route_Activity.this);
                 if(lastLocation != null) {
                     Position origin = Position.fromCoordinates(lastLocation.getLongitude(), lastLocation.getLatitude());
                     while (cur.moveToNext()) {
@@ -328,14 +317,12 @@ public class Daily_Route_Activity extends AppCompatActivity {
                 .setProfile(DirectionsCriteria.PROFILE_CYCLING)
                 .setAccessToken(MapboxAccountManager.getInstance().getAccessToken())
                 .build();
-
         if(Calc){
             client.enqueueCall(new Callback<DirectionsResponse>() {
                 @Override
                 public void onResponse(Call<DirectionsResponse> call, Response<DirectionsResponse> response) {
                     // You can get the generic HTTP info about the response
                     Log.d(TAG, "Response code: " + response.code());
-
                     if (response.body() == null) {
                         Log.e(TAG, "No routes found, make sure you set the right user and access token.");
                         return;
@@ -343,15 +330,10 @@ public class Daily_Route_Activity extends AppCompatActivity {
                         Log.e(TAG, "No routes found");
                         return;
                     }
-
                     // Print some info about the route
                     currentRoute = response.body().getRoutes().get(0);
-                    Log.d(TAG, "Distance: " + currentRoute.getDistance());
-
                     dist = dist + currentRoute.getDistance() *1.3;
-
                     current.setText(String.valueOf((int)dist));
-
                 }
 
                 @Override
@@ -366,7 +348,6 @@ public class Daily_Route_Activity extends AppCompatActivity {
                 public void onResponse(Call<DirectionsResponse> call, Response<DirectionsResponse> response) {
                     // You can get the generic HTTP info about the response
                     Log.d(TAG, "Response code: " + response.code());
-
                     if (response.body() == null) {
                         Log.e(TAG, "No routes found, make sure you set the right user and access token.");
                         return;
@@ -374,14 +355,12 @@ public class Daily_Route_Activity extends AppCompatActivity {
                         Log.e(TAG, "No routes found");
                         return;
                     }
-
                     // Print some info about the route
                     currentRoute = response.body().getRoutes().get(0);
                     Log.d(TAG, "Distance: " + currentRoute.getDistance());
                     // Draw the route on the map
                     drawRoute(currentRoute);
                 }
-
                 @Override
                 public void onFailure(Call<DirectionsResponse> call, Throwable throwable) {
                     Log.e(TAG, "Error: " + throwable.getMessage());
@@ -398,15 +377,11 @@ public class Daily_Route_Activity extends AppCompatActivity {
         List<Position> coordinates = lineString.getCoordinates();
         LatLng[] points = new LatLng[coordinates.size()];
         for (int i = 0; i < coordinates.size(); i++) {
-            points[i] = new LatLng(
-                    coordinates.get(i).getLatitude(),
-                    coordinates.get(i).getLongitude());
+            points[i] = new LatLng(coordinates.get(i).getLatitude(), coordinates.get(i).getLongitude());
         }
 
         // Draw Points on MapView
-        map.addPolyline(new PolylineOptions()
-                .add(points)
-                .color(Color.parseColor("#009688"))
+        map.addPolyline(new PolylineOptions().add(points).color(Color.parseColor("#009688"))
                 .width(5));
     }
 
@@ -428,7 +403,7 @@ public class Daily_Route_Activity extends AppCompatActivity {
     private void enableLocation(boolean enabled) {
         if (enabled) {
             // If we have the last location of the user, we can move the camera to that position.
-            Location lastLocation = LocationServices.getLocationServices(this).getLastLocation();
+            Location lastLocation = this.getCheapLocation(this);
             if (lastLocation != null) {
                 map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(lastLocation), 16));
             }
@@ -458,7 +433,6 @@ public class Daily_Route_Activity extends AppCompatActivity {
     }
     private void getLatLongFromAddress(String address)
     {
-
         Geocoder geoCoder = new Geocoder(this, Locale.getDefault());
         try
         {
@@ -466,17 +440,11 @@ public class Daily_Route_Activity extends AppCompatActivity {
             List<Address> addresses = geoCoder.getFromLocationName(address , 1);
             if (addresses.size() > 0)
             {
-
-                LatLng p = new LatLng(
-                        (addresses.get(0).getLatitude()),
-                        (addresses.get(0).getLongitude()));
-
+                LatLng p = new LatLng((addresses.get(0).getLatitude()), (addresses.get(0).getLongitude()));
                 lat=p.getLatitude();
                 lng=p.getLongitude();
-
                 Log.d("Latitude, dest", ""+lat);
                 Log.d("Longitude, dest", ""+lng);
-
             }
         }
         catch(Exception e)
@@ -486,7 +454,7 @@ public class Daily_Route_Activity extends AppCompatActivity {
 
     }
 
-    private	boolean hasNetworkConnection(){
+    private boolean hasNetworkConnection(){
         ConnectivityManager connectivityManager	=
                 (ConnectivityManager)	getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo	=
@@ -502,6 +470,35 @@ public class Daily_Route_Activity extends AppCompatActivity {
                 (isWifiAvailable&&isWifiConnected);
         return(isConnected);
     }
+
+    public Location getCheapLocation(Context	theContext)	{
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+                ContextCompat.checkSelfPermission(this,
+                        Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION},
+                    279);
+
+        }
+        Criteria criteria = new Criteria();
+        criteria.setAccuracy(Criteria.ACCURACY_COARSE);
+        criteria.setPowerRequirement(Criteria.POWER_LOW);
+        LocationManager manager	= (LocationManager)getSystemService(theContext.LOCATION_SERVICE);
+        String cheapestProvider	= manager.getBestProvider(criteria,	true);
+
+        Location myLocation=null;
+        myLocation = manager.getLastKnownLocation(cheapestProvider);
+        if	(myLocation == null)	{
+            myLocation = manager.getLastKnownLocation("network");
+        }
+        if	(myLocation != null)	{
+            System.out.println("GeoLocation	is>" + myLocation.toString() + "<");
+        }
+        return myLocation;
+    }
+
 
     @Override
     public void onResume() {
