@@ -11,6 +11,8 @@ import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
@@ -240,11 +242,6 @@ public class Daily_Route_Activity extends AppCompatActivity {
             public void onMapReady(MapboxMap mapboxMap) {
                 map = mapboxMap;
                 toggleGps(true);
-                Position origin = Position.fromCoordinates(LocationServices.getLocationServices(Daily_Route_Activity.this)
-                        .getLastLocation().getLongitude(), LocationServices.getLocationServices(Daily_Route_Activity.this).getLastLocation().getLatitude());
-                // Add origin and destination to the map
-                Log.d(TAG, "Lat: " + origin.getLatitude() + " Long:" + origin.getLongitude());
-
 
 
                 String addr = "";
@@ -261,7 +258,7 @@ public class Daily_Route_Activity extends AppCompatActivity {
                         }
                     } while (cur.moveToNext());
                 }
-                if(addr.equals("")){
+                if(addr.equals("") || !hasNetworkConnection()){
                     return;
                 }
                 getLatLongFromAddress(addr);
@@ -270,6 +267,14 @@ public class Daily_Route_Activity extends AppCompatActivity {
                         .position(new LatLng(destination.getLatitude(), destination.getLongitude()))
                         .title("Destination")
                         .snippet("Destination"));
+                Location lastLocation = LocationServices.getLocationServices(Daily_Route_Activity.this).getLastLocation();
+                if(lastLocation == null){
+                    return;
+                }
+                Position origin = Position.fromCoordinates(lastLocation.getLongitude(), lastLocation.getLatitude());
+                // Add origin and destination to the map
+                Log.d(TAG, "Lat: " + origin.getLatitude() + " Long:" + origin.getLongitude());
+
 
                 // Get route from API
                 try {
@@ -281,29 +286,38 @@ public class Daily_Route_Activity extends AppCompatActivity {
             }
         });
         current = (TextView) findViewById(R.id.textExpect);
+        //new Thread(new Runnable() {
+            //@Override
+           //public void run() {
+                //Calculate expected steps.
+                Location lastLocation = LocationServices.getLocationServices(Daily_Route_Activity.this).getLastLocation();
+                if(lastLocation != null) {
+                    Position origin = Position.fromCoordinates(lastLocation.getLongitude(), lastLocation.getLatitude());
+                    while (cur.moveToNext()) {
+                        String addr = "";
+                        Long start = Long.parseLong(cur.getString(2));
+                        Long curTime = System.currentTimeMillis();
+                        Log.d(TAG, "Start time: " + start + ", Cur time: " + curTime);
+                        addr = cur.getString(3);
+                        if (!addr.equals("") && hasNetworkConnection()) {
+                            getLatLongFromAddress(addr);
+                            Position destination = Position.fromCoordinates(lng, lat);
 
-        //Calculate expected steps.
-        Position origin = Position.fromCoordinates(LocationServices.getLocationServices(Daily_Route_Activity.this)
-                .getLastLocation().getLongitude(), LocationServices.getLocationServices(Daily_Route_Activity.this).getLastLocation().getLatitude());
-        while(cur.moveToNext()){
-            String addr ="";
-            Long start = Long.parseLong(cur.getString(2));
-            Long curTime = System.currentTimeMillis();
-            Log.d(TAG, "Start time: " + start + ", Cur time: " + curTime);
-            addr = cur.getString(3);
-            if(!addr.equals("")){
-                getLatLongFromAddress(addr);
-                Position destination = Position.fromCoordinates( lng, lat);
-
-                // Get route from API for just calculation
-                try {
-                    getRoute(origin, destination, true);
-                    origin = destination;
-                } catch (ServicesException servicesException) {
-                    servicesException.printStackTrace();
+                            // Get route from API for just calculation
+                            try {
+                                getRoute(origin, destination, true);
+                                origin = destination;
+                            } catch (ServicesException servicesException) {
+                                servicesException.printStackTrace();
+                            }
+                        }
+                    }
+                } else {
+                    Log.d(TAG, "GPS could not return location, either a failure or GPS is off has occurred");
                 }
-            }
-        }
+            //}
+        //}).start();
+
     }
 
     private void getRoute(Position origin, Position destination, boolean Calc) throws ServicesException {
@@ -423,10 +437,6 @@ public class Daily_Route_Activity extends AppCompatActivity {
                 @Override
                 public void onLocationChanged(Location location) {
                     if (location != null) {
-                        // Move the map camera to where the user location is and then remove the
-                        // listener so the camera isn't constantly updating when the user location
-                        // changes. When the user disables and then enables the location again, this
-                        // listener is registered again and will adjust the camera once again.
                         map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location), 16));
                         LocationServices.getLocationServices(Daily_Route_Activity.this).removeLocationListener(this);
                     }
@@ -476,6 +486,22 @@ public class Daily_Route_Activity extends AppCompatActivity {
 
     }
 
+    private	boolean hasNetworkConnection(){
+        ConnectivityManager connectivityManager	=
+                (ConnectivityManager)	getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo	=
+                connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+        boolean isConnected	=	true;
+        boolean isWifiAvailable	=	networkInfo.isAvailable();
+        boolean isWifiConnected	=	networkInfo.isConnected();
+        networkInfo	=
+                connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+        boolean isMobileAvailable	=	networkInfo.isAvailable();
+        boolean isMobileConnnected	=	networkInfo.isConnected();
+        isConnected	=	(isMobileAvailable&&isMobileConnnected)	||
+                (isWifiAvailable&&isWifiConnected);
+        return(isConnected);
+    }
 
     @Override
     public void onResume() {

@@ -28,6 +28,7 @@ public class  StepService extends IntentService implements SensorEventListener{
     private SQLiteDatabase db;
     private SensorManager mSensorManager;
     private Sensor mStepCounterSensor;
+
     private Sensor mStepDetectorSensor;
     private final String TAG = getClass().getSimpleName();
     Handler handler = new Handler();
