@@ -18,13 +18,10 @@
         tools:layout_conversion_absoluteY="182dp"
         tools:layout_conversion_absoluteWidth="215dp"
         tools:layout_conversion_absoluteHeight="42dp"
-        android:layout_marginBottom="234dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginRight="8dp"
-        app:layout_constraintRight_toRightOf="parent"
-        android:layout_marginLeft="8dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintHorizontal_bias="0.503"/>
+        android:layout_marginBottom="117dp"
+        android:layout_marginRight="738dp"
+        app:layout_constraintRight_toRightOf="@+id/editHeight"/>
 
     <Button
         android:text="@string/exit"
@@ -36,10 +33,10 @@
         tools:layout_conversion_absoluteY="233dp"
         tools:layout_conversion_absoluteWidth="88dp"
         tools:layout_conversion_absoluteHeight="48dp"
-        android:layout_marginRight="78dp"
+        android:layout_marginRight="204dp"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginBottom="43dp"/>
+        android:layout_marginBottom="26dp"/>
 
     <Button
         android:text="@string/save"
@@ -54,9 +51,9 @@
         android:layout_marginRight="8dp"
         android:layout_marginLeft="8dp"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintHorizontal_bias="0.711"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginBottom="43dp"/>
+        android:layout_marginBottom="26dp"/>
 
     <EditText
         android:layout_width="wrap_content"
@@ -69,13 +66,10 @@
         tools:layout_conversion_absoluteY="267dp"
         tools:layout_conversion_absoluteWidth="215dp"
         tools:layout_conversion_absoluteHeight="27dp"
+        android:layout_marginLeft="388dp"
+        app:layout_constraintLeft_toLeftOf="@+id/editWeight"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginBottom="143dp"
-        android:layout_marginRight="8dp"
-        app:layout_constraintRight_toRightOf="parent"
-        android:layout_marginLeft="8dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintHorizontal_bias="0.503"/>
+        android:layout_marginBottom="117dp"/>
 
     <TextView
         android:text="@string/labelWeight"
@@ -87,12 +81,13 @@
         tools:layout_conversion_absoluteY="147dp"
         tools:layout_conversion_absoluteWidth="103dp"
         tools:layout_conversion_absoluteHeight="16dp"
-        android:layout_marginRight="8dp"
+        android:layout_marginBottom="22dp"
+        app:layout_constraintBottom_toTopOf="@+id/editWeight"
+        android:layout_marginRight="421dp"
         app:layout_constraintRight_toRightOf="parent"
         android:layout_marginLeft="8dp"
         app:layout_constraintLeft_toLeftOf="parent"
-        android:layout_marginBottom="22dp"
-        app:layout_constraintBottom_toTopOf="@+id/editWeight"/>
+        app:layout_constraintHorizontal_bias="0.77"/>
 
     <TextView
         android:text="@string/labelHeight"
@@ -108,7 +103,8 @@
         app:layout_constraintRight_toRightOf="parent"
         android:layout_marginLeft="8dp"
         app:layout_constraintLeft_toLeftOf="parent"
-        android:layout_marginBottom="11dp"
+        app:layout_constraintHorizontal_bias="0.911"
+        android:layout_marginBottom="22dp"
         app:layout_constraintBottom_toTopOf="@+id/editHeight"/>
 
     <Spinner
@@ -119,13 +115,13 @@
         tools:layout_conversion_absoluteY="109dp"
         tools:layout_conversion_absoluteWidth="560dp"
         tools:layout_conversion_absoluteHeight="24dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="104dp"
         android:layout_marginRight="8dp"
         app:layout_constraintRight_toRightOf="parent"
         android:layout_marginLeft="8dp"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintHorizontal_bias="0.502"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginBottom="343dp"/>
+        app:layout_constraintHorizontal_bias="0.501"/>
 
     <TextView
         android:text="@string/labelGender"
@@ -137,14 +133,12 @@
         tools:layout_conversion_absoluteY="78dp"
         tools:layout_conversion_absoluteWidth="46dp"
         tools:layout_conversion_absoluteHeight="16dp"
+        android:layout_marginBottom="15dp"
+        app:layout_constraintBottom_toTopOf="@+id/spinner"
         android:layout_marginRight="8dp"
         app:layout_constraintRight_toRightOf="parent"
         android:layout_marginLeft="8dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        android:layout_marginBottom="11dp"
-        app:layout_constraintBottom_toTopOf="@+id/spinner"
-        app:layout_constraintHorizontal_bias="0.501"
-        />
+        app:layout_constraintLeft_toLeftOf="parent"/>
 
     <TextView
         android:text="@string/prevSteps"
@@ -157,13 +151,12 @@
         tools:layout_conversion_absoluteY="44dp"
         tools:layout_conversion_absoluteWidth="113dp"
         tools:layout_conversion_absoluteHeight="16dp"
-        android:layout_marginLeft="8dp"
-        app:layout_constraintLeft_toLeftOf="parent"
         android:layout_marginRight="8dp"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="16dp"
-        />
+        android:layout_marginLeft="8dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/textPrevSteps"/>
 
     <TextView
         android:text="TextView"
@@ -176,12 +169,12 @@
         tools:layout_conversion_absoluteY="86dp"
         tools:layout_conversion_absoluteWidth="215dp"
         tools:layout_conversion_absoluteHeight="53dp"
-        android:layout_marginRight="8dp"
-        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="198dp"
         android:layout_marginLeft="8dp"
         app:layout_constraintLeft_toLeftOf="parent"
-        android:layout_marginTop="7dp"
-        app:layout_constraintTop_toBottomOf="@+id/textView6"/>
+        android:layout_marginRight="8dp"
+        app:layout_constraintRight_toRightOf="parent"/>
 
 
 </android.support.constraint.ConstraintLayout>
