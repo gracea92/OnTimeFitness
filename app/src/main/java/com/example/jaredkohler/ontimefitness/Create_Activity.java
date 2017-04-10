@@ -149,7 +149,7 @@ public class Create_Activity extends AppCompatActivity {
         finish();
     }
 
-    private static String encrypt(String toBeEncrypt) throws GeneralSecurityException, UnsupportedEncodingException {
+    public static String encrypt(String toBeEncrypt) throws GeneralSecurityException, UnsupportedEncodingException {
         byte[] data = null;
         try {
             data = toBeEncrypt.getBytes("UTF-8");

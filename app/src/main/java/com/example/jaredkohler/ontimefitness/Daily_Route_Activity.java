@@ -92,8 +92,6 @@ public class Daily_Route_Activity extends AppCompatActivity {
         Log.d(TAG, "+++ onCreate() +++");
         setContentView(R.layout.activity_route);
 
-
-
         Intent intent = getIntent();
         ViewGroup layout = (ViewGroup) findViewById(R.id.activity_schedule);
         TextView goal = (TextView) findViewById(R.id.textGoal);
@@ -254,16 +252,14 @@ public class Daily_Route_Activity extends AppCompatActivity {
                 Position destination = Position.fromCoordinates( lng, lat);
                 mapboxMap.addMarker(new MarkerOptions()
                         .position(new LatLng(destination.getLatitude(), destination.getLongitude()))
-                        .title("Destination")
-                        .snippet("Destination"));
+                        .title("Destination").snippet(addr));
+                //Seperate return to allow at least the destination to be shown if the GPS isn't working.
                 Location lastLocation = Daily_Route_Activity.this.getCheapLocation(Daily_Route_Activity.this);
                 if(lastLocation == null){
                     return;
                 }
                 Position origin = Position.fromCoordinates(lastLocation.getLongitude(), lastLocation.getLatitude());
-                // Add origin and destination to the map
                 Log.d(TAG, "Lat: " + origin.getLatitude() + " Long:" + origin.getLongitude());
-
 
                 // Get route from API
                 try {
@@ -275,9 +271,9 @@ public class Daily_Route_Activity extends AppCompatActivity {
             }
         });
         current = (TextView) findViewById(R.id.textExpect);
-        //new Thread(new Runnable() {
-            //@Override
-           //public void run() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
                 //Calculate expected steps.
                 Location lastLocation = Daily_Route_Activity.this.getCheapLocation(Daily_Route_Activity.this);
                 if(lastLocation != null) {
@@ -304,8 +300,8 @@ public class Daily_Route_Activity extends AppCompatActivity {
                 } else {
                     Log.d(TAG, "GPS could not return location, either a failure or GPS is off has occurred");
                 }
-            //}
-        //}).start();
+            }
+        }).start();
 
     }
 
@@ -368,7 +364,6 @@ public class Daily_Route_Activity extends AppCompatActivity {
                 }
             });
         }
-
     }
 
     private void drawRoute(DirectionsRoute route) {
