@@ -20,7 +20,6 @@ public class Options_Activity extends AppCompatActivity {
 
     private final String TAG = getClass().getSimpleName();
     public final static String EXTRA_MESSAGE = "com.example.jaredkohler.ontimefitness.Schedule_Activity";
-    private final DateChangedReceiver mDateChangedReceiver = new DateChangedReceiver();
 
     @Override protected void onPause(){
         super.onPause();

@@ -64,7 +64,7 @@ public class  StepService extends IntentService implements SensorEventListener{
             public void run() {
                 while(true){
                     try{
-                        Thread.sleep(10000);
+                        Thread.sleep(600000);
                         handler.post(new Runnable() {
                             @Override
                             public void run() {
