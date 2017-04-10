@@ -6,43 +6,46 @@
     <string name="password">admin</string>
 
     <!-- UI Text -->
-    <string name= "defaultWeight">100</string>
-    <string name= "defaultHeight">72</string>
-    <string name= "exit">Exit</string>
-    <string name= "create">Create</string>
-    <string name= "labelWeight">Weight(Pounds)</string>
-    <string name= "labelHeight">Height(Inches)</string>
-    <string name= "labelGender">Gender</string>
-    <string name= "user">Username</string>
-    <string name= "pass">Password</string>
-    <string name= "confirmPass">Confirm Password</string>
-    <string name= "date">Date(YYYY/MM/DD)</string>
-    <string name= "location">Location</string>
-    <string name= "time">Time(HH:MM)</string>
-    <string name= "name">Name</string>
-    <string name= "save">Save</string>
-    <string name= "daily">Daily</string>
-    <string name= "weekly">Weekly</string>
-    <string name= "monthly">Monthly</string>
-    <string name= "login">Login</string>
-    <string name= "viewData">View Database</string>
-    <string name= "expected">Expected</string>
-    <string name= "goal">Goal</string>
-    <string name= "current">Current</string>
-    <string name= "dailyRoute">Daily Route</string>
-    <string name= "bodySettings">Body Settings</string>
-    <string name= "edit">Edit</string>
-    <string name= "remove">Remove</string>
-    <string name= "active">Active</string>
-    <string name= "scheduleSelectPrompt">Select a schedule to make active, edit or remove.</string>
-    <string name= "curSchedule">Current Schedule: ScheduleA</string>
-    <string name= "selectSchedule">Select Schedule</string>
-    <string name= "addEvent">Add Event</string>
-    <string name= "editEvent">Edit Event</string>
-    <string name= "prevSteps">Yesterday\'s Steps</string>
+    <string name="defaultWeight">100</string>
+    <string name="defaultHeight">72</string>
+    <string name="exit">Exit</string>
+    <string name="create">Create</string>
+    <string name="labelWeight">Weight(Pounds)</string>
+    <string name="labelHeight">Height(Inches)</string>
+    <string name="labelGender">Gender</string>
+    <string name="user">Username</string>
+    <string name="pass">Password</string>
+    <string name="confirmPass">Confirm Password</string>
+    <string name="date">Date(YYYY/MM/DD)</string>
+    <string name="location">Location</string>
+    <string name="time">Time(HH:MM)</string>
+    <string name="name">Name</string>
+    <string name="save">Save</string>
+    <string name="daily">Daily</string>
+    <string name="weekly">Weekly</string>
+    <string name="monthly">Monthly</string>
+    <string name="login">Login</string>
+    <string name="viewData">View Database</string>
+    <string name="expected">Expected</string>
+    <string name="goal">Goal</string>
+    <string name="current">Current</string>
+    <string name="dailyRoute">Daily Route</string>
+    <string name="bodySettings">Body Settings</string>
+    <string name="edit">Edit</string>
+    <string name="remove">Remove</string>
+    <string name="active">Active</string>
+    <string name="scheduleSelectPrompt">Select a schedule to make active, edit or remove.</string>
+    <string name="curSchedule">Current Schedule: ScheduleA</string>
+    <string name="selectSchedule">Select Schedule</string>
+    <string name="addEvent">Add Event</string>
+    <string name="editEvent">Edit Event</string>
+    <string name="prevSteps">Yesterday\'s Steps</string>
     <string name="access_token">pk.eyJ1IjoiamFyZWRma29obGVyIiwiYSI6ImNqMHJnanB0aDAyYmQycW13enV6bzdnc3EifQ._1to2HHJcHsHVbIHtjWj8Q</string>
-    <string-array name= "gender_array">
+    <string-array name="gender_array">
         <item>Male</item>
         <item>Female</item>
     </string-array>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
